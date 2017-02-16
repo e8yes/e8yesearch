@@ -1,4 +1,4 @@
-# ey8yesearch
+# e8yesearch
 e8yes search engine.
 
 ### Reqired libraries
