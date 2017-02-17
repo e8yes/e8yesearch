@@ -1,6 +1,6 @@
 #include "e8yesearch.h"
 
-void web::E8yeSearch::main(std::string url)
+void web::E8yeSearch::main(std::string)
 {
         response().out()<<
                            "<html>\n"
