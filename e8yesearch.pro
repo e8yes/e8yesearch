@@ -19,9 +19,16 @@ SOURCES += src/main.cpp \
     src/spidy.cpp
 
 LIBS += -lcppcms -lbooster
+
+macx {
 INCLUDEPATH += /usr/local/include
 LIBS += -L/usr/local/lib
 LIBS += -lboost_system-mt -lboost_filesystem-mt
+}
+
+unix:!macx {
+LIBS += -lboost_system -lboost_filesystem
+}
 
 HEADERS += \
     src/e8yesearch.h \
