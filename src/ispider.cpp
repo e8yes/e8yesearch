@@ -4,3 +4,8 @@ engine::support::ISpider::ISpider()
 {
 
 }
+
+engine::support::ISpider::~ISpider()
+{
+
+}
