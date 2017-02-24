@@ -19,6 +19,7 @@ SOURCES += src/main.cpp \
     src/spidy.cpp
 
 LIBS += -lcppcms -lbooster
+LIBS += -lxerces-c
 
 macx {
 INCLUDEPATH += /usr/local/include
