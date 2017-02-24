@@ -18,9 +18,13 @@ TEMPLATE = app
 SOURCES += tst_unittest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../build-e8yesearch-Desktop_Qt_5_7_0_GCC_64bit-Debug/release/ -le8yesearch
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../build-e8yesearch-Desktop_Qt_5_7_0_GCC_64bit-Debug/debug/ -le8yesearch
-else:unix: LIBS += -L$$PWD/../../build-e8yesearch-Desktop_Qt_5_7_0_GCC_64bit-Debug/ -le8yesearch
+unix:!macx {
+LIBS += -L../build-e8yesearch-Desktop-Debug -le8yesearch
+}
+
+macx {
+LIBS += -L$$PWD/../../build-e8yesearch-Desktop_Qt_5_7_0_GCC_64bit-Debug/ -le8yesearch
+}
 
 INCLUDEPATH += $$PWD/''
 DEPENDPATH += $$PWD/''

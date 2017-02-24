@@ -41,3 +41,9 @@ bool engine::Term::operator<(const Term& term) const
 {
         return m_content < term.m_content;
 }
+
+std::ostream& engine::operator<<(std::ostream& os, const Term& term)
+{
+        os << "Term=[" << term.m_content << "," << term.m_freq << "," << term.m_idf << "," << term.m_local_pos << "," << term.m_lweight << "]";
+        return os;
+}

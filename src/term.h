@@ -1,12 +1,15 @@
 #ifndef TERM_H
 #define TERM_H
+
 #include <string>
+#include <ostream>
 
 namespace engine
 {
 
 class Term
 {
+        friend std::ostream& operator<<(std::ostream& os, const Term& term);
 public:
         Term(const std::string& content, float locational_weight, unsigned position);
         void 			inc_idf();
@@ -23,6 +26,8 @@ private:
         float 		m_lweight;
         unsigned 	m_local_pos;
 };
+
+std::ostream& operator<<(std::ostream& os, const Term& term);
 
 }
 

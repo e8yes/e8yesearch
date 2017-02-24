@@ -6,14 +6,17 @@
 #include <sstream>
 #include <string>
 
+typedef boost::iterator_range<boost::filesystem::directory_iterator> 	dir_range_iter_t;
+typedef boost::filesystem::directory_iterator				dir_iter_t;
+
 
 // Token Iterator
 engine::support::SpidyTokenIterator::SpidyTokenIterator()
 {
-        this->current_position = 0;
 }
 
-bool engine::support::SpidyTokenIterator::has_next() const
+bool
+engine::support::SpidyTokenIterator::has_next() const
 {
         if (this->current_position == this->tokens.size()) {
                 return false;
@@ -21,11 +24,18 @@ bool engine::support::SpidyTokenIterator::has_next() const
         return true;
 }
 
-engine::Term engine::support::SpidyTokenIterator::next()
+engine::Term
+engine::support::SpidyTokenIterator::next()
 {
         engine::Term term(this->tokens[this->current_position], 1, this->current_position);
         this->current_position++;
         return term;
+}
+
+void
+engine::support::SpidyTokenIterator::add(const std::string& token)
+{
+        tokens.push_back(token);
 }
 
 engine::support::SpidyTokenIterator::~SpidyTokenIterator()
@@ -35,20 +45,22 @@ engine::support::SpidyTokenIterator::~SpidyTokenIterator()
 // Document Iterator
 engine::support::SpidyDocIterator::SpidyDocIterator()
 {
-        this->current_position = 0;
 }
 
-bool engine::support::SpidyDocIterator::has_next() const
+bool
+engine::support::SpidyDocIterator::has_next() const
 {
         return static_cast<size_t>(this->current_position) < this->file_names.size();
 }
 
-void engine::support::SpidyDocIterator::add(std::string file_name)
+void
+engine::support::SpidyDocIterator::add(std::string file_name)
 {
         this->file_names.push_back(file_name);
 }
 
-engine::support::ITokenIterator* engine::support::SpidyDocIterator::parse()
+engine::support::ITokenIterator*
+engine::support::SpidyDocIterator::parse()
 {
         std::fstream file(this->file_names[this->current_position]);
         SpidyTokenIterator* spidyTokenIterator = new SpidyTokenIterator();
@@ -57,6 +69,7 @@ engine::support::ITokenIterator* engine::support::SpidyDocIterator::parse()
                 file >> content; // stop when space
                 spidyTokenIterator->add(content);
         }
+        this->current_position ++;
         return spidyTokenIterator;
 }
 
@@ -65,19 +78,25 @@ engine::support::SpidyDocIterator::~SpidyDocIterator()
 }
 
 // Spidy crawl
-engine::support::IDocumentIterator* engine::support::Spidy::crawl(const std::string &directory)
+static void
+crawl(const boost::filesystem::path& dir, engine::support::SpidyDocIterator* doc_it)
 {
-        boost::filesystem::path p = directory;
-
-        SpidyDocIterator* spidyDocIterator = new SpidyDocIterator();
-        for(auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(p), {})) {
-                std::stringstream sstream;
-                sstream << entry;
-                std::string entry_str;
-                sstream >> entry_str;
-                spidyDocIterator->add(entry_str);
+        if (boost::filesystem::is_directory(dir)) {
+                dir_range_iter_t range = boost::make_iterator_range(boost::filesystem::directory_iterator(dir), {});
+                for(dir_iter_t it = range.begin(); it != range.end(); ++ it) {
+                        ::crawl(it->path(), doc_it);
+                }
+        } else {
+                doc_it->add(dir.string());
         }
-        return spidyDocIterator;
+}
+
+engine::support::IDocumentIterator*
+engine::support::Spidy::crawl(const std::string &directory)
+{
+        SpidyDocIterator* it= new SpidyDocIterator();
+        ::crawl(boost::filesystem::path(directory), it);
+        return it;
 }
 
 
