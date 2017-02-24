@@ -22,3 +22,8 @@ Note: "make install" requires root privilege.
 ```
 apt-get install libboost-dev
 ```
+
+###### Xerces-C++
+```
+apt-get install libxerces-c-dev
+```
