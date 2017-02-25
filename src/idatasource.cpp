@@ -4,3 +4,7 @@ engine::IDataSource::IDataSource()
 {
 
 }
+
+engine::IDataSource::~IDataSource()
+{
+}
