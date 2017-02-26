@@ -3,6 +3,7 @@
 #include <iostream>
 #include "../src/term.h"
 #include "../src/spidy.h"
+#include "../src/sqlitedatasource.h"
 
 class UnitTest : public QObject
 {
@@ -13,6 +14,7 @@ public:
 
 private Q_SLOTS:
         void testSpidy();
+        void testDB();
 };
 
 UnitTest::UnitTest()
@@ -35,6 +37,12 @@ void UnitTest::testSpidy()
 
         delete doc_iter;
 }
+
+void UnitTest::testDB()
+{
+    engine::SQLiteDataSource sqliteDataSource;
+}
+
 
 QTEST_APPLESS_MAIN(UnitTest)
 

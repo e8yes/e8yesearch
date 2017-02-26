@@ -1,4 +1,4 @@
-#-------------------------------------------------
+GG#-------------------------------------------------
 #
 # Project created by QtCreator 2017-02-21T21:53:10
 #
@@ -24,6 +24,12 @@ LIBS += -L../build-e8yesearch-Desktop-Debug -le8yesearch
 
 macx {
 LIBS += -L$$PWD/../../build-e8yesearch-Desktop_Qt_5_7_0_GCC_64bit-Debug/ -le8yesearch
+}
+
+macx {
+INCLUDEPATH += /usr/local/include
+LIBS += -L/usr/local/lib
+LIBS += -lboost_system-mt -lboost_filesystem-mt
 }
 
 INCLUDEPATH += $$PWD/''

@@ -16,10 +16,12 @@ SOURCES += src/main.cpp \
     src/datasourceprimitive.cpp \
     src/document.cpp \
     src/term.cpp \
-    src/spidy.cpp
+    src/spidy.cpp \
+    src/sqlitedatasource.cpp
 
 LIBS += -lcppcms -lbooster
 LIBS += -lxerces-c
+LIBS += -lcppdb
 
 macx {
 INCLUDEPATH += /usr/local/include
@@ -43,4 +45,5 @@ HEADERS += \
     src/datasourceprimitive.h \
     src/document.h \
     src/term.h \
-    src/spidy.h
+    src/spidy.h \
+    src/sqlitedatasource.h
