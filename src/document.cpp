@@ -7,12 +7,12 @@ engine::Document::Document(const std::string& url, const std::string& heading, f
 {
 }
 
-engine::Document::Document(uint64_t id, const std::string& url, const std::string& heading, float importance):
+engine::Document::Document(doc_id_t id, const std::string& url, const std::string& heading, float importance):
         m_id(id), m_url(url), m_heading(heading), m_importance(importance)
 {
 }
 
-uint64_t
+engine::doc_id_t
 engine::Document::get_id() const
 {
         return m_id;

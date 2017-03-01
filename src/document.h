@@ -8,13 +8,15 @@
 namespace engine
 {
 
+typedef uint64_t doc_id_t;
+
 class Document
 {
 public:
         Document(const std::string& url, const std::string& heading, float importance);
-        Document(uint64_t id, const std::string& url, const std::string& heading, float importance);
+        Document(doc_id_t id, const std::string& url, const std::string& heading, float importance);
 
-        uint64_t			get_id() const;
+        doc_id_t			get_id() const;
         const std::string&		get_url() const;
         const std::string& 		get_heading() const;
         float 				get_importance() const;

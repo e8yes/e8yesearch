@@ -31,6 +31,7 @@ public:
         ~SpidyDocIterator() override;
 
         void 			add(std::string file_name);
+        std::string             get_descriptor() const override;
         bool 			has_next() const override;
         ITokenIterator* 	parse() override;
 

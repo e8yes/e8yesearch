@@ -23,6 +23,7 @@ class IDocumentIterator
 {
 public:
         virtual ~IDocumentIterator();
+        virtual std::string     get_descriptor() const = 0;
         virtual bool 		has_next() const = 0;
         virtual ITokenIterator* parse() = 0;
 };

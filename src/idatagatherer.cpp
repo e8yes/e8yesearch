@@ -4,3 +4,7 @@ engine::IDataGatherer::IDataGatherer()
 {
 
 }
+
+engine::IDataGatherer::~IDataGatherer()
+{
+}

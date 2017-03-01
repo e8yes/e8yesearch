@@ -47,6 +47,12 @@ engine::support::SpidyDocIterator::SpidyDocIterator()
 {
 }
 
+std::string
+engine::support::SpidyDocIterator::get_descriptor() const
+{
+        return file_names[current_position];
+}
+
 bool
 engine::support::SpidyDocIterator::has_next() const
 {

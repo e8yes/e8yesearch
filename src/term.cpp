@@ -13,22 +13,22 @@ engine::Term::Term(uint64_t id, const std::string& content, unsigned freq, unsig
 {
 }
 
-uint64_t
+engine::term_id_t
 engine::Term::get_id() const
 {
         return m_id;
 }
 
 void
-engine::Term::inc_tf()
+engine::Term::set_tf(unsigned tf)
 {
-        m_freq ++;
+        m_freq = tf;
 }
 
 void
-engine::Term::inc_idf()
+engine::Term::set_idf(unsigned idf)
 {
-        m_idf ++;
+        m_idf = idf;
 }
 
 const std::string&
