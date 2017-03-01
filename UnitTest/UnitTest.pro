@@ -23,7 +23,7 @@ LIBS += -L../build-e8yesearch-Desktop-Debug -le8yesearch
 }
 
 macx {
-LIBS += -L$$PWD/../../build-e8yesearch-Desktop_Qt_5_7_0_GCC_64bit-Debug/ -le8yesearch
+LIBS += -L../build-e8yesearch -le8yesearch
 }
 
 macx {
