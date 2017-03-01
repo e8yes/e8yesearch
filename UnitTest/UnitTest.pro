@@ -19,7 +19,7 @@ SOURCES += tst_unittest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 unix:!macx {
-LIBS += -L../build-e8yesearch-Desktop-Debug -le8yesearch
+LIBS += -L$$PWD/../build-e8yesearch-Desktop-Debug -le8yesearch
 }
 
 macx {

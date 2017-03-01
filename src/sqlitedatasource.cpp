@@ -17,9 +17,9 @@ engine::SQLiteDataSource::~SQLiteDataSource()
 
 void engine::SQLiteDataSource::destroy()
 {
-    sql << "DELETE FROM document" << cppdb::exec;
-    sql << "DELETE FROM term" << cppdb::exec;
-    sql << "DELETE FROM posting_list" << cppdb::exec;
+    sql << "DELETE FROM document;" << cppdb::exec;
+    sql << "DELETE FROM term;" << cppdb::exec;
+    sql << "DELETE FROM posting_list;" << cppdb::exec;
 }
 
 void engine::SQLiteDataSource::add_documents(const std::vector<Document>& docs)
@@ -50,7 +50,6 @@ void engine::SQLiteDataSource::add_documents(const std::vector<Document>& docs)
             try {
                 stat.exec();
             } catch (std::exception const &e) {
-                std::cerr << "ERROR: " << e.what() << std::endl;
             }
             stat.reset();
         }
@@ -67,7 +66,6 @@ void engine::SQLiteDataSource::add_documents(const std::vector<Document>& docs)
             try {
                 stat.exec();
             } catch (std::exception const &e) {
-                std::cerr << "ERROR: " << e.what() << std::endl;
             }
             stat.reset();
         }

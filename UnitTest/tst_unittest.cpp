@@ -4,6 +4,7 @@
 #include "../src/term.h"
 #include "../src/spidy.h"
 #include "../src/sqlitedatasource.h"
+#include "../src/localdatagatherer.h"
 
 class UnitTest : public QObject
 {
@@ -15,6 +16,7 @@ public:
 private Q_SLOTS:
         void testSpidy();
         void testDB();
+        void testLocalDataGatherer();
 };
 
 UnitTest::UnitTest()
@@ -55,6 +57,15 @@ void UnitTest::testDB()
     sqliteDataSource.add_documents(test_docs);
 }
 
+void UnitTest::testLocalDataGatherer()
+{
+        engine::support::Spidy spidy;
+        engine::SQLiteDataSource sqliteDataSource;
+        sqliteDataSource.destroy();
+
+        engine::LocalDataGatherer gatherer(&spidy, &sqliteDataSource);
+        gatherer.run("TestDir");
+}
 
 QTEST_APPLESS_MAIN(UnitTest)
 

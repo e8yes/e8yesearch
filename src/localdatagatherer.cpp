@@ -29,7 +29,7 @@ engine::LocalDataGatherer::compute_idf(const std::string& directory, idf_t& idf)
                 for (term_id_t id: terms) {
                         idf_t::iterator it = idf.find(id);
                         if (it != idf.end())	it->second ++;
-                        else			idf.insert(idf_entry_t(id, 0));
+                        else			idf.insert(idf_entry_t(id, 1));
                 }
         }
         delete doc_iter;
@@ -54,7 +54,7 @@ engine::LocalDataGatherer::run(const std::string& directory)
                         Term term = tok_iter->next();
                         std::map<Term, unsigned>::iterator it = terms_freq.find(term);
                         if (it != terms_freq.end())	it->second ++;
-                        else				terms_freq.insert(std::pair<Term, unsigned>(term, 0));
+                        else				terms_freq.insert(std::pair<Term, unsigned>(term, 1));
                 }
                 delete tok_iter;
 
@@ -63,7 +63,7 @@ engine::LocalDataGatherer::run(const std::string& directory)
                         Term term = it->first;
                         term.set_tf(it->second);
                         term.set_idf(idf.at(term.get_id()));
-                        curr_doc.add_term(it->first);
+                        curr_doc.add_term(term);
                 }
 
                 std::vector<Document> docs;
