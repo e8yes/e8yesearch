@@ -17,7 +17,8 @@ SOURCES += src/main.cpp \
     src/document.cpp \
     src/term.cpp \
     src/spidy.cpp \
-    src/sqlitedatasource.cpp
+    src/sqlitedatasource.cpp \
+    src/utils.cpp
 
 LIBS += -lcppcms -lbooster
 LIBS += -lxerces-c
@@ -46,4 +47,5 @@ HEADERS += \
     src/document.h \
     src/term.h \
     src/spidy.h \
-    src/sqlitedatasource.h
+    src/sqlitedatasource.h \
+    src/utils.h

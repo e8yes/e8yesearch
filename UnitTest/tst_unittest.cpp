@@ -41,6 +41,18 @@ void UnitTest::testSpidy()
 void UnitTest::testDB()
 {
     engine::SQLiteDataSource sqliteDataSource;
+    sqliteDataSource.destroy();
+
+    std::vector<engine::Document> test_docs;
+    for (int i = 0; i < 10; i++) {
+        engine::Document doc("url_" + std::to_string(i), "title_"+ std::to_string(i), 0);
+        for (int j = 0; j < 3; j++) {
+            engine::Term term("content_" + std::to_string(j), 0.0, 0);
+            doc.add_term(term);
+        }
+        test_docs.push_back(doc);
+    }
+    sqliteDataSource.add_documents(test_docs);
 }
 
 
