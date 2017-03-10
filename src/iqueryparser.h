@@ -11,7 +11,7 @@ class IQueryParser
 {
 public:
         IQueryParser();
-        virtual ~IQueryParser() = 0;
+        virtual ~IQueryParser();
         virtual TextQuery parse(const std::string& squery) = 0;
 };
 

@@ -1,10 +1,13 @@
 #include <QString>
 #include <QtTest>
 #include <iostream>
+#include <string>
 #include "../src/term.h"
 #include "../src/spidy.h"
 #include "../src/sqlitedatasource.h"
 #include "../src/localdatagatherer.h"
+#include "../src/spidyparser.h"
+#include "../src/spidytextsearch.h"
 
 class UnitTest : public QObject
 {
@@ -13,10 +16,12 @@ class UnitTest : public QObject
 public:
         UnitTest();
 
-private Q_SLOTS:
         void testSpidy();
         void testDB();
         void testLocalDataGatherer();
+private Q_SLOTS:
+
+        void testQueryParser();
 };
 
 UnitTest::UnitTest()
@@ -65,6 +70,35 @@ void UnitTest::testLocalDataGatherer()
 
         engine::LocalDataGatherer gatherer(&spidy, &sqliteDataSource);
         gatherer.run("TestDir");
+}
+
+void UnitTest::testQueryParser()
+{
+    std::string query = "Machine Learning";
+    //std::getline(std::cin, query);
+    std::cout << "Input your query: " << query << std::endl;
+
+    engine::spidyParser spidyParser;
+    engine::TextQuery textQuery = spidyParser.parse(query);
+
+    engine::IDataSource* iDataSource = new engine::SQLiteDataSource();
+    //iDataSource->destroy();
+    //engine::support::Spidy spidy;
+    //engine::LocalDataGatherer gatherer(&spidy, iDataSource);
+    //gatherer.run("WEBPAGES_SIMPLE");
+
+    engine::spidyTextSearch spidyTextSearch(iDataSource);
+    engine::sorted_results_t documents;
+    spidyTextSearch.find(textQuery, documents);
+
+    if (documents.empty()) {
+            std::cout << "No matched document found" << std::endl;
+    } else {
+        for (engine::Document doc : documents) {
+            std::cout << doc.get_url() << std::endl;
+        }
+    }
+
 }
 
 QTEST_APPLESS_MAIN(UnitTest)

@@ -14,12 +14,12 @@ typedef std::vector<Document> sorted_results_t;
 class ITextSearch
 {
 public:
-        ITextSearch(const IDataSource& data_source);
-        virtual ~ITextSearch() = 0;
+        ITextSearch(IDataSource& data_source);
+        virtual ~ITextSearch();
 
         virtual void find(const TextQuery& text, sorted_results_t& result) = 0;
-private:
-        const IDataSource& m_data_source;
+protected:
+        IDataSource& m_data_source;
 };
 
 };

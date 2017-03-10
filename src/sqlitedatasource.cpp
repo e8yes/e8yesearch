@@ -75,12 +75,19 @@ void engine::SQLiteDataSource::add_documents(const std::vector<Document>& docs)
 
 void engine::SQLiteDataSource::find_documents_by_terms(const std::vector<Term>& terms, std::vector<Document>& docs)
 {
-        cppdb::statement stat;
+    cppdb::statement stat;
+    try {
         for (Term term : terms) {
-                cppdb::result res = sql << "SELECT * FROM posting_list WHERE tid = ?;";
-                stat.bind(term.get_id());
-                stat.reset();
-                stat.exec();
-                docs.push_back(Document(res.get<uint64_t>("did"), res.get<std::string>("url"), res.get<std::string>("title"), 0));
+            stat = sql << "SELECT document.did, url, title FROM posting_list, document, term WHERE document.did = posting_list.did "
+                          "AND term.tid = posting_list.tid AND upper(str) = upper(?);";
+            stat.bind(term.get_content());
+            cppdb::result res = stat.query();
+            while (res.next()) {
+                docs.push_back(Document(0, res.get<std::string>("url"), "", 0));
+            }
+            stat.reset();
         }
+    } catch (std::exception const &e) {
+            std::cout << e.what() << std::endl;
+    }
 }
