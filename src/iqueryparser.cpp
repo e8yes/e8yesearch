@@ -4,3 +4,8 @@ engine::IQueryParser::IQueryParser()
 {
 
 }
+
+engine::IQueryParser::~IQueryParser()
+{
+
+}

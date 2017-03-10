@@ -19,7 +19,9 @@ SOURCES += src/main.cpp \
     src/spidy.cpp \
     src/sqlitedatasource.cpp \
     src/utils.cpp \
-    src/localdatagatherer.cpp
+    src/localdatagatherer.cpp \
+    src/spidyparser.cpp \
+    src/spidytextsearch.cpp
 
 LIBS += -lcppcms -lbooster
 LIBS += -lxerces-c
@@ -50,4 +52,6 @@ HEADERS += \
     src/spidy.h \
     src/sqlitedatasource.h \
     src/utils.h \
-    src/localdatagatherer.h
+    src/localdatagatherer.h \
+    src/spidyparser.h \
+    src/spidytextsearch.h
