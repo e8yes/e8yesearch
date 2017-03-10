@@ -1,7 +1,12 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+
+#include <vector>
+#include <iterator>
+#include <utility>
 #include <cstdint>
+#include "mapbptree.h"
 
 namespace engine
 {

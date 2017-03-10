@@ -70,5 +70,6 @@ engine::LocalDataGatherer::run(const std::string& directory)
                 docs.push_back(curr_doc);
                 m_ds->add_documents(docs);
         }
+        m_ds->force_transaction();
         delete doc_iter;
 }

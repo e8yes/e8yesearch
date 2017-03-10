@@ -13,27 +13,13 @@ SOURCES += src/main.cpp \
     src/ispider.cpp \
     src/idatagatherer.cpp \
     src/e8yesgatherer.cpp \
-    src/datasourceprimitive.cpp \
     src/document.cpp \
     src/term.cpp \
     src/spidy.cpp \
     src/sqlitedatasource.cpp \
     src/utils.cpp \
-    src/localdatagatherer.cpp
-
-LIBS += -lcppcms -lbooster
-LIBS += -lxerces-c
-LIBS += -lcppdb
-
-macx {
-INCLUDEPATH += /usr/local/include
-LIBS += -L/usr/local/lib
-LIBS += -lboost_system-mt -lboost_filesystem-mt
-}
-
-unix:!macx {
-LIBS += -lboost_system -lboost_filesystem
-}
+    src/localdatagatherer.cpp \
+    src/bptreedatasource.cpp
 
 HEADERS += \
     src/e8yesearch.h \
@@ -44,10 +30,25 @@ HEADERS += \
     src/ispider.h \
     src/idatagatherer.h \
     src/e8yesgatherer.h \
-    src/datasourceprimitive.h \
     src/document.h \
     src/term.h \
     src/spidy.h \
     src/sqlitedatasource.h \
     src/utils.h \
-    src/localdatagatherer.h
+    src/localdatagatherer.h \
+    src/bptreedatasource.h \
+    src/mapbptree.h
+
+LIBS += -lcppcms -lbooster
+LIBS += -lxerces-c
+LIBS += -lcppdb
+
+macx {
+        INCLUDEPATH += /usr/local/include
+        LIBS += -L/usr/local/lib
+        LIBS += -lboost_system-mt -lboost_filesystem-mt
+}
+
+unix:!macx {
+        LIBS += -lboost_system -lboost_filesystem
+}
