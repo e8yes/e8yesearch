@@ -34,7 +34,7 @@ void engine::spidyTextSearch::find(const TextQuery& text, sorted_results_t& resu
         }
     }
 
-    std::sort(result.begin(), result.end(), [] (const Document& a, const Document& b) {
+    std::sort(result.begin(), result.end(), [] (const Document& a, const Document& b) -> bool {
         return a.get_importance() < b.get_importance();
     });
 }

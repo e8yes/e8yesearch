@@ -60,9 +60,3 @@ engine::Document::get_terms() const
 {
         return m_terms;
 }
-
-void
-engine::Document::set_importance(float importance)
-{
-        m_importance = importance;
-}
