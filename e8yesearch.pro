@@ -20,8 +20,8 @@ SOURCES += src/main.cpp \
     src/utils.cpp \
     src/localdatagatherer.cpp \
     src/bptreedatasource.cpp \
-    src/spidyparser.cpp \
-    src/spidytextsearch.cpp
+    src/spidytextsearch.cpp \
+    src/spidyqueryhandler.cpp
 
 LIBS += -lcppcms -lbooster
 LIBS += -lxerces-c
@@ -54,8 +54,8 @@ HEADERS += \
     src/localdatagatherer.h \
     src/bptreedatasource.h \
     src/mapbptree.h \
-    src/spidyparser.h \
-    src/spidytextsearch.h
+    src/spidytextsearch.h \
+    src/spidyqueryhandler.h
 
 LIBS += -lcppcms -lbooster
 LIBS += -lxerces-c

@@ -29,6 +29,7 @@
 *.app
 
 build*
+*.db
 
 WEBPAGES_RAW/*
 UnitTest/WEBPAGES_RAW/*

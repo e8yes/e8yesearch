@@ -6,7 +6,7 @@
 #include "../src/spidy.h"
 #include "../src/sqlitedatasource.h"
 #include "../src/localdatagatherer.h"
-#include "../src/spidyparser.h"
+#include "../src/spidyqueryhandler.h"
 #include "../src/spidytextsearch.h"
 
 class UnitTest : public QObject
@@ -18,10 +18,11 @@ public:
 
 
 private Q_SLOTS:
-        void testSpidy();
         void testDB();
         void testLocalDataGatherer();
         void testQueryParser();
+private Q_SLOTS:
+        void testSpidy();
 };
 
 UnitTest::UnitTest()
@@ -78,7 +79,7 @@ void UnitTest::testQueryParser()
     //std::getline(std::cin, query);
     std::cout << "Input your query: " << query << std::endl;
 
-    engine::spidyParser spidyParser;
+    engine::spidyQueryHandler spidyParser;
     engine::TextQuery textQuery = spidyParser.parse(query);
 
     engine::IDataSource* iDataSource = new engine::SQLiteDataSource();

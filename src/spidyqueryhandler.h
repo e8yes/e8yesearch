@@ -3,11 +3,11 @@
 #include "iqueryparser.h"
 
 namespace engine {
-class spidyParser:public IQueryParser
+class spidyQueryHandler:public IQueryParser
 {
 public:
-    spidyParser();
-    ~spidyParser();
+    spidyQueryHandler();
+    ~spidyQueryHandler();
     TextQuery parse(const std::string& squery);
 };
 }
