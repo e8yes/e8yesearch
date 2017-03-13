@@ -4,13 +4,12 @@
 #include <string>
 #include <map>
 #include <ostream>
+#include "term.h"
 
 namespace engine
 {
 
 typedef uint64_t term_id_t;
-typedef std::map<term_id_t, unsigned> idf_t;
-typedef std::pair<term_id_t, unsigned> idf_entry_t;
 
 class Term
 {
@@ -94,9 +93,9 @@ public:
         }
 
         Term(const std::string& content, Location location, unsigned position);
-        Term(term_id_t id, const std::string& content, unsigned freq, unsigned idf, float locational_weight, unsigned position);
+        Term(const std::string& content, unsigned freq, unsigned idf, float locational_weight, unsigned position);
 
-        term_id_t		get_id() const;
+        term_id_t		get_hash_id() const;
         void 			set_idf(unsigned idf);
         void 			set_tf(unsigned tf);
         const std::string& 	get_content() const;
@@ -106,7 +105,7 @@ public:
         unsigned		get_position() const;
         bool			operator<(const Term& term) const;
 private:
-        const term_id_t		m_id;
+        const term_id_t		m_hash_id;
         const std::string	m_content;
         unsigned 		m_freq = 0;
         unsigned		m_idf = 0;
@@ -115,6 +114,10 @@ private:
 };
 
 std::ostream& operator<<(std::ostream& os, const Term& term);
+
+
+typedef std::map<Term, unsigned> idf_t;
+typedef std::pair<Term, unsigned> idf_entry_t;
 
 }
 

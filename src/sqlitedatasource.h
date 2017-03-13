@@ -20,7 +20,7 @@ public:
         void force_transaction() override;
 
 private:
-        const static int	MAX_BUFFER_SIZE = 200;
+        const static int	MAX_BUFFER_SIZE = 1000;
         cppdb::session 		sql;
         std::vector<Document>	buffer;
 };

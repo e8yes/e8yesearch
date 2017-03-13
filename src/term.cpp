@@ -4,21 +4,32 @@
 #include "term.h"
 
 
+static const std::locale loc;
+
+static std::string toupper(const std::string& content)
+{
+        std::string upper;
+        upper.resize(content.size());
+        for (unsigned i = 0; i < content.size();i ++) {
+                upper[i] = std::toupper(content[i], loc);
+        }
+        return upper;
+}
 
 engine::Term::Term(const std::string& content, Location location, unsigned position):
-    m_id(util::hash(content.c_str())), m_content(content), m_lweight(positional_weight(location)), m_local_pos(position)
+    m_hash_id(util::hash(toupper(content).c_str())), m_content(toupper(content)), m_lweight(positional_weight(location)), m_local_pos(position)
 {
 }
 
-engine::Term::Term(uint64_t id, const std::string& content, unsigned freq, unsigned idf, float locational_weight, unsigned position):
-    m_id(id), m_content(content), m_freq(freq), m_idf(idf), m_lweight(locational_weight), m_local_pos(position)
+engine::Term::Term(const std::string& content, unsigned freq, unsigned idf, float locational_weight, unsigned position):
+    m_hash_id(util::hash(toupper(content).c_str())), m_content(content), m_freq(freq), m_idf(idf), m_lweight(locational_weight), m_local_pos(position)
 {
 }
 
 engine::term_id_t
-engine::Term::get_id() const
+engine::Term::get_hash_id() const
 {
-        return m_id;
+        return m_hash_id;
 }
 
 void
@@ -66,7 +77,7 @@ engine::Term::get_position() const
 bool
 engine::Term::operator<(const Term& term) const
 {
-        return m_content < term.m_content;
+        return m_hash_id != term.m_hash_id ? m_hash_id < term.m_hash_id : m_content < term.m_content;
 }
 
 std::ostream&

@@ -3,19 +3,14 @@
 
 
 engine::Document::Document(const std::string& url, const std::string& heading, float importance):
-        m_id(util::hash(url.c_str())), m_url(url), m_heading(heading), m_importance(importance)
-{
-}
-
-engine::Document::Document(doc_id_t id, const std::string& url, const std::string& heading, float importance):
-        m_id(id), m_url(url), m_heading(heading), m_importance(importance)
+        m_hash_id(util::hash(url.c_str())), m_url(url), m_heading(heading), m_importance(importance)
 {
 }
 
 engine::doc_id_t
-engine::Document::get_id() const
+engine::Document::get_hash_id() const
 {
-        return m_id;
+        return m_hash_id;
 }
 
 const std::string&
@@ -39,7 +34,7 @@ engine::Document::get_importance() const
 bool
 engine::Document::operator<(const Document& rhs) const
 {
-        return m_importance < rhs.m_importance;
+        return m_hash_id != rhs.m_hash_id ? m_hash_id < rhs.m_hash_id : m_url < rhs.m_url;
 }
 
 void

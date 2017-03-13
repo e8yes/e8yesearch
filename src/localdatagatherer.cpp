@@ -18,18 +18,18 @@ engine::LocalDataGatherer::compute_idf(const std::string& directory, idf_t& idf)
         support::IDocumentIterator* doc_iter = m_spider->crawl(directory);
         while (doc_iter->has_next()) {
                 // Collect terms.
-                std::set<term_id_t> terms;
+                std::set<Term> terms;
                 support::ITokenIterator* tok_iter = doc_iter->parse();
                 while (tok_iter->has_next()) {
-                        terms.insert(tok_iter->next().get_id());
+                        terms.insert(tok_iter->next());
                 }
                 delete tok_iter;
 
                 // Update idf stats.
-                for (term_id_t id: terms) {
-                        idf_t::iterator it = idf.find(id);
+                for (Term term: terms) {
+                        idf_t::iterator it = idf.find(term);
                         if (it != idf.end())	it->second ++;
-                        else			idf.insert(idf_entry_t(id, 1));
+                        else			idf.insert(idf_entry_t(term, 1));
                 }
         }
         delete doc_iter;
@@ -62,7 +62,7 @@ engine::LocalDataGatherer::run(const std::string& directory)
                 for (std::map<Term, unsigned>::const_iterator it = terms_freq.begin(); it != terms_freq.end(); ++ it) {
                         Term term = it->first;
                         term.set_tf(it->second);
-                        term.set_idf(idf.at(term.get_id()));
+                        term.set_idf(idf.at(term));
                         curr_doc.add_term(term);
                 }
 

@@ -14,9 +14,8 @@ class Document
 {
 public:
         Document(const std::string& url, const std::string& heading, float importance);
-        Document(doc_id_t id, const std::string& url, const std::string& heading, float importance);
 
-        doc_id_t			get_id() const;
+        doc_id_t			get_hash_id() const;
         const std::string&		get_url() const;
         const std::string& 		get_heading() const;
         float 				get_importance() const;
@@ -26,7 +25,7 @@ public:
 
         bool operator<(const Document& rhs) const;
 private:
-        const uint64_t		m_id;
+        const uint64_t		m_hash_id;
         const std::string 	m_url;
         const std::string 	m_heading;
         const float 		m_importance;

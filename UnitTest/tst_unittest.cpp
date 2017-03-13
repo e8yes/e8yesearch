@@ -16,11 +16,11 @@ class UnitTest : public QObject
 public:
         UnitTest();
 
+
+private Q_SLOTS:
         void testSpidy();
         void testDB();
         void testLocalDataGatherer();
-private Q_SLOTS:
-
         void testQueryParser();
 };
 
@@ -54,7 +54,7 @@ void UnitTest::testDB()
         for (int i = 0; i < 10; i++) {
                 engine::Document doc("url_" + std::to_string(i), "title_"+ std::to_string(i), 0);
                 for (int j = 0; j < 3; j++) {
-                        engine::Term term("content_" + std::to_string(j), 0.0, 0);
+                        engine::Term term("content_" + std::to_string(j), engine::Term::Location::Title, 0);
                         doc.add_term(term);
                 }
                 test_docs.push_back(doc);
@@ -69,12 +69,12 @@ void UnitTest::testLocalDataGatherer()
         sqliteDataSource.destroy();
 
         engine::LocalDataGatherer gatherer(&spidy, &sqliteDataSource);
-        gatherer.run("TestDir");
+        gatherer.run("WEBPAGES_RAW");
 }
 
 void UnitTest::testQueryParser()
 {
-    std::string query = "Machine Learning";
+    std::string query = "letter";
     //std::getline(std::cin, query);
     std::cout << "Input your query: " << query << std::endl;
 
@@ -82,10 +82,10 @@ void UnitTest::testQueryParser()
     engine::TextQuery textQuery = spidyParser.parse(query);
 
     engine::IDataSource* iDataSource = new engine::SQLiteDataSource();
-    //iDataSource->destroy();
-    //engine::support::Spidy spidy;
-    //engine::LocalDataGatherer gatherer(&spidy, iDataSource);
-    //gatherer.run("WEBPAGES_SIMPLE");
+    /*iDataSource->destroy();
+    engine::support::Spidy spidy;
+    engine::LocalDataGatherer gatherer(&spidy, iDataSource);
+    gatherer.run("WEBPAGES_RAW");*/
 
     engine::spidyTextSearch spidyTextSearch(iDataSource);
     engine::sorted_results_t documents;
