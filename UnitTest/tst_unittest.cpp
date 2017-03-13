@@ -6,7 +6,7 @@
 #include "../src/spidy.h"
 #include "../src/sqlitedatasource.h"
 #include "../src/localdatagatherer.h"
-#include "../src/spidyparser.h"
+#include "../src/spidyqueryhandler.h"
 #include "../src/spidytextsearch.h"
 
 class UnitTest : public QObject
@@ -16,12 +16,11 @@ class UnitTest : public QObject
 public:
         UnitTest();
 
-        void testSpidy();
         void testDB();
         void testLocalDataGatherer();
-private Q_SLOTS:
-
         void testQueryParser();
+private Q_SLOTS:
+        void testSpidy();
 };
 
 UnitTest::UnitTest()
@@ -54,8 +53,8 @@ void UnitTest::testDB()
         for (int i = 0; i < 10; i++) {
                 engine::Document doc("url_" + std::to_string(i), "title_"+ std::to_string(i), 0);
                 for (int j = 0; j < 3; j++) {
-                        engine::Term term("content_" + std::to_string(j), 0.0, 0);
-                        doc.add_term(term);
+                        engine::Term term("content_" + std::to_string(j), engine::Term::Location::Heading1, 0);
+
                 }
                 test_docs.push_back(doc);
         }
@@ -78,7 +77,7 @@ void UnitTest::testQueryParser()
     //std::getline(std::cin, query);
     std::cout << "Input your query: " << query << std::endl;
 
-    engine::spidyParser spidyParser;
+    engine::spidyQueryHandler spidyParser;
     engine::TextQuery textQuery = spidyParser.parse(query);
 
     engine::IDataSource* iDataSource = new engine::SQLiteDataSource();
