@@ -17,7 +17,6 @@ public:
         UnitTest();
 
 
-private Q_SLOTS:
         void testDB();
         void testLocalDataGatherer();
         void testQueryParser();
@@ -35,7 +34,7 @@ void UnitTest::testSpidy()
         engine::support::IDocumentIterator* doc_iter = spidy.crawl("TestDir");
 
         while (doc_iter->has_next()) {
-                std::cout << "Processing new document:" << std::endl;
+                std::cout << "Processing new document:" << doc_iter->get_descriptor() << std::endl;
 
                 engine::support::ITokenIterator* tok_iter = doc_iter->parse();
                 while (tok_iter->has_next()) {
@@ -70,7 +69,7 @@ void UnitTest::testLocalDataGatherer()
         sqliteDataSource.destroy();
 
         engine::LocalDataGatherer gatherer(&spidy, &sqliteDataSource);
-        gatherer.run("WEBPAGES_RAW");
+        gatherer.run("WEBPAGES_SIMPLE");
 }
 
 void UnitTest::testQueryParser()

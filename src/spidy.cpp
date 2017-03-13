@@ -24,33 +24,35 @@ typedef boost::filesystem::directory_iterator				dir_iter_t;
 // Token Iterator
 engine::support::SpidyTokenIterator::SpidyTokenIterator()
 {
+        xercesc::XMLPlatformUtils::Initialize();
+}
+
+engine::support::SpidyTokenIterator::~SpidyTokenIterator()
+{
+        xercesc::XMLPlatformUtils::Terminate();
 }
 
 bool
 engine::support::SpidyTokenIterator::has_next() const
 {
-    if (this->current_position == this->tokens.size()) {
-        return false;
-    }
-    return true;
+        if (this->current_position == this->tokens.size()) {
+                return false;
+        }
+        return true;
 }
 
 engine::Term
 engine::support::SpidyTokenIterator::next()
 {
-    Term term(this->tokens[this->current_position], Term::Paragraph, this->current_position);
-    this->current_position++;
-    return term;
+        Term term(this->tokens[this->current_position], Term::Paragraph, this->current_position);
+        this->current_position++;
+        return term;
 }
 
 void
 engine::support::SpidyTokenIterator::add(const std::string& token)
 {
-    tokens.push_back(token);
-}
-
-engine::support::SpidyTokenIterator::~SpidyTokenIterator()
-{
+        tokens.push_back(token);
 }
 
 // Document Iterator
@@ -61,19 +63,19 @@ engine::support::SpidyDocIterator::SpidyDocIterator()
 std::string
 engine::support::SpidyDocIterator::get_descriptor() const
 {
-    return file_names[current_position];
+        return file_names[current_position];
 }
 
 bool
 engine::support::SpidyDocIterator::has_next() const
 {
-    return static_cast<size_t>(this->current_position) < this->file_names.size();
+        return static_cast<size_t>(this->current_position) < this->file_names.size();
 }
 
 void
 engine::support::SpidyDocIterator::add(std::string file_name)
 {
-    this->file_names.push_back(file_name);
+        this->file_names.push_back(file_name);
 }
 
 
@@ -102,81 +104,101 @@ engine::support::SpidyDocIterator::add(std::string file_name)
 
 static inline std::string tostring(const XMLCh* xmlchstr)
 {
-    return xercesc::XMLString::transcode(xmlchstr);
+        return xercesc::XMLString::transcode(xmlchstr);
 }
 
 
 void visit(xercesc::DOMElement* node, engine::support::SpidyTokenIterator& spidyTokenIterator)
 {
 
-    const XMLCh* tag = node->getTagName();
-    if (xercesc::XMLString::compareIString(tag, xercesc::XMLString::transcode("div")) == 0) {
-        spidyTokenIterator.add(tostring(node->getTextContent()));
-    } else if ((xercesc::XMLString::compareIString(tag, xercesc::XMLString::transcode("p")) == 0)) {
-        spidyTokenIterator.add(tostring(node->getTextContent()));
-    } else if ((xercesc::XMLString::compareIString(tag, xercesc::XMLString::transcode("h1")) == 0)) {
-        spidyTokenIterator.add(tostring(node->getTextContent()));
-    } else if ((xercesc::XMLString::compareIString(tag, xercesc::XMLString::transcode("h2")) == 0)) {
-        spidyTokenIterator.add(tostring(node->getTextContent()));
-    } else if ((xercesc::XMLString::compareIString(tag, xercesc::XMLString::transcode("h3")) == 0)) {
-        spidyTokenIterator.add(tostring(node->getTextContent()));
-    } else if ((xercesc::XMLString::compareIString(tag, xercesc::XMLString::transcode("title")) == 0)) {
-        spidyTokenIterator.add(tostring(node->getTextContent()));
-    }
+        const XMLCh* tag = node->getTagName();
+        if (xercesc::XMLString::compareIString(tag, xercesc::XMLString::transcode("div")) == 0) {
+                spidyTokenIterator.add(tostring(node->getTextContent()));
+        } else if ((xercesc::XMLString::compareIString(tag, xercesc::XMLString::transcode("p")) == 0)) {
+                spidyTokenIterator.add(tostring(node->getTextContent()));
+        } else if ((xercesc::XMLString::compareIString(tag, xercesc::XMLString::transcode("h1")) == 0)) {
+                spidyTokenIterator.add(tostring(node->getTextContent()));
+        } else if ((xercesc::XMLString::compareIString(tag, xercesc::XMLString::transcode("h2")) == 0)) {
+                spidyTokenIterator.add(tostring(node->getTextContent()));
+        } else if ((xercesc::XMLString::compareIString(tag, xercesc::XMLString::transcode("h3")) == 0)) {
+                spidyTokenIterator.add(tostring(node->getTextContent()));
+        } else if ((xercesc::XMLString::compareIString(tag, xercesc::XMLString::transcode("title")) == 0)) {
+                spidyTokenIterator.add(tostring(node->getTextContent()));
+        }
 }
 
 
 void loop(xercesc::DOMElement* node, engine::support::SpidyTokenIterator& spidyTokenIterator)
 {
-    visit(node, spidyTokenIterator);
-    for (unsigned i = 0; i < node->getChildElementCount(); i++) {
-        loop(dynamic_cast<xercesc::DOMElement*>(node->getChildNodes()->item(i)), spidyTokenIterator);
-    }
+        if (node == nullptr)
+                return;
+        visit(node, spidyTokenIterator);
+        for (unsigned i = 0; i < node->getChildElementCount(); i++) {
+                loop(dynamic_cast<xercesc::DOMElement*>(node->getChildNodes()->item(i)), spidyTokenIterator);
+        }
+}
+
+void
+parse_as_text(const std::string& file_name, engine::support::SpidyTokenIterator* it)
+{
+        std::fstream file(file_name);
+
+        std::string buffer;
+        int state = 0;
+        while (file.good()) {
+                int ch = file.get();
+                if (ch == file.eof())
+                        continue;
+                switch (state) {
+                case 0:
+                        if (std::isalnum(ch)) {
+                                buffer += static_cast<char>(ch);
+                                state = 1;
+                        } else
+                                state = 0;
+                        break;
+                case 1:
+                        if (!std::isalnum(ch) && ch != '-') {
+                                it->add(buffer);
+                                buffer.clear();
+                                state = 1;
+                        } else {
+                                buffer += static_cast<char>(ch);
+                                state = 1;
+                        }
+                        break;
+                }
+        }
 }
 
 engine::support::ITokenIterator*
 engine::support::SpidyDocIterator::parse()
 {
-//    std::fstream file(this->file_names[this->current_position]);
+        SpidyTokenIterator* spidyTokenIterator = new SpidyTokenIterator();
 
-    SpidyTokenIterator* spidyTokenIterator = new SpidyTokenIterator();
+        std::string curr_file = this->file_names[this->current_position ++];
 
-    xercesc::XMLPlatformUtils::Initialize();
-    xercesc::XercesDOMParser xercesDomParser;
+        xercesc::XercesDOMParser xercesDomParser;
 
-    xercesc::DOMDocument* domDoc;
-    xercesc::DOMElement* root;
-    try {
-        xercesDomParser.parse(this->file_names[this->current_position].c_str());
-    } catch (...) {
-        XERCES_STD_QUALIFIER cerr << "An error occurred during parsing\n " << XERCES_STD_QUALIFIER endl;
-        goto hell;
-    }
-    domDoc = xercesDomParser.getDocument();
-    root = domDoc->getDocumentElement();
+        xercesc::DOMDocument* domDoc;
+        xercesc::DOMElement* root;
+        try {
+                xercesDomParser.parse(curr_file.c_str());
+        } catch (xercesc::XMLException& e) {
+                ::parse_as_text(curr_file, spidyTokenIterator);
+                return spidyTokenIterator;
+        }
+        if (nullptr != (domDoc = xercesDomParser.getDocument())) {
+                if (nullptr != (root = domDoc->getDocumentElement())) {
+                        ::loop(root, *spidyTokenIterator);
+                        return spidyTokenIterator;
+                }
+        }
 
-    ::loop(root, *spidyTokenIterator);
-//    while (file.good()) {
-//        std::string content;
-//        file >> content; // stop when space
-//        spidyTokenIterator->add(content);
-//    }
-
-hell:
-    this->current_position ++;
-    return spidyTokenIterator;
+        // Fallback to plain text search.
+        ::parse_as_text(curr_file, spidyTokenIterator);
+        return spidyTokenIterator;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 engine::support::SpidyDocIterator::~SpidyDocIterator()
 {
@@ -186,22 +208,22 @@ engine::support::SpidyDocIterator::~SpidyDocIterator()
 static void
 crawl(const boost::filesystem::path& dir, engine::support::SpidyDocIterator* doc_it)
 {
-    if (boost::filesystem::is_directory(dir)) {
-        dir_range_iter_t range = boost::make_iterator_range(boost::filesystem::directory_iterator(dir), {});
-        for(dir_iter_t it = range.begin(); it != range.end(); ++ it) {
-            ::crawl(it->path(), doc_it);
+        if (boost::filesystem::is_directory(dir)) {
+                dir_range_iter_t range = boost::make_iterator_range(boost::filesystem::directory_iterator(dir), {});
+                for(dir_iter_t it = range.begin(); it != range.end(); ++ it) {
+                        ::crawl(it->path(), doc_it);
+                }
+        } else {
+                doc_it->add(dir.string());
         }
-    } else {
-        doc_it->add(dir.string());
-    }
 }
 
 engine::support::IDocumentIterator*
 engine::support::Spidy::crawl(const std::string &directory)
 {
-    SpidyDocIterator* it= new SpidyDocIterator();
-    ::crawl(boost::filesystem::path(directory), it);
-    return it;
+        SpidyDocIterator* it= new SpidyDocIterator();
+        ::crawl(boost::filesystem::path(directory), it);
+        return it;
 }
 
 
