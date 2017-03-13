@@ -23,7 +23,7 @@ LIBS += -L$$PWD/../build -le8yesearch
 }
 
 macx {
-LIBS += -L../build-e8yesearch -le8yesearch
+LIBS += -L$$PWD/../build-e8yesearch -le8yesearch
 }
 
 macx {
@@ -32,5 +32,10 @@ LIBS += -L/usr/local/lib
 LIBS += -lboost_system-mt -lboost_filesystem-mt
 }
 
+LIBS += -lxerces-c
+
 INCLUDEPATH += $$PWD/''
 DEPENDPATH += $$PWD/''
+
+INCLUDEPATH += $$PWD/../build-e8yesearch
+DEPENDPATH += $$PWD/../build-e8yesearch

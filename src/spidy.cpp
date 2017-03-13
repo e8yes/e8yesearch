@@ -205,7 +205,7 @@ engine::support::SpidyDocIterator::parse()
                 ::parse_as_text(curr_file, spidyTokenIterator);
                 return spidyTokenIterator;
         }
-        if (nullptr != (root = domDoc->getDocumentElement())) {
+        if (domDoc != nullptr && nullptr != (root = domDoc->getDocumentElement())) {
                 ::loop(root, *spidyTokenIterator);
                 return spidyTokenIterator;
         }

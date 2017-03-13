@@ -31,6 +31,12 @@ engine::Document::get_importance() const
         return m_importance;
 }
 
+void
+engine::Document::set_importance(float importance)
+{
+    this->m_importance = importance;
+}
+
 bool
 engine::Document::operator<(const Document& rhs) const
 {
