@@ -16,10 +16,10 @@ class UnitTest : public QObject
 public:
         UnitTest();
 
-        void testSpidy();
         void testDB();
-        void testLocalDataGatherer();
 private Q_SLOTS:
+        void testSpidy();
+        void testLocalDataGatherer();
         void testQueryParser();
 };
 

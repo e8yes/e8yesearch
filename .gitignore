@@ -31,5 +31,6 @@
 build*
 *.db
 
+UnitTest/WEBPAGES_SIMPLE/
 WEBPAGES_RAW/*
 UnitTest/WEBPAGES_RAW/*
