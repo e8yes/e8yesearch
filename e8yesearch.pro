@@ -19,7 +19,7 @@ SOURCES += src/main.cpp \
     src/sqlitedatasource.cpp \
     src/utils.cpp \
     src/localdatagatherer.cpp \
-    src/bptreedatasource.cpp
+    src/bptreedatasource.cpp \
     src/spidyparser.cpp \
     src/spidytextsearch.cpp
 
@@ -53,7 +53,7 @@ HEADERS += \
     src/utils.h \
     src/localdatagatherer.h \
     src/bptreedatasource.h \
-    src/mapbptree.h
+    src/mapbptree.h \
     src/spidyparser.h \
     src/spidytextsearch.h
 

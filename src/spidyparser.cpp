@@ -15,7 +15,7 @@ engine::TextQuery engine::spidyParser::parse(const std::string& query)
         while (sstream.good()) {
             std::string temp_str;
             sstream >> temp_str;
-            textQuery.add_query(Term(temp_str, 0 , 0));
+            textQuery.add_query(Term(temp_str, Term::Heading1, 0));
         }
         return textQuery;
 }

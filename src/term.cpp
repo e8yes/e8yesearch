@@ -3,8 +3,10 @@
 #include "utils.h"
 #include "term.h"
 
-engine::Term::Term(const std::string& content, float locational_weight, unsigned position):
-    m_id(util::hash(content.c_str())), m_content(content), m_lweight(locational_weight), m_local_pos(position)
+
+
+engine::Term::Term(const std::string& content, Location location, unsigned position):
+    m_id(util::hash(content.c_str())), m_content(content), m_lweight(positional_weight(location)), m_local_pos(position)
 {
 }
 

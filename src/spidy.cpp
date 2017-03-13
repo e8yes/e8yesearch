@@ -27,7 +27,7 @@ engine::support::SpidyTokenIterator::has_next() const
 engine::Term
 engine::support::SpidyTokenIterator::next()
 {
-        engine::Term term(this->tokens[this->current_position], 1, this->current_position);
+        Term term(this->tokens[this->current_position], Term::Paragraph, this->current_position);
         this->current_position++;
         return term;
 }
