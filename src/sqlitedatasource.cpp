@@ -1,4 +1,5 @@
 #include <vector>
+#include <set>
 #include <map>
 #include <iostream>
 
@@ -12,7 +13,7 @@ engine::SQLiteDataSource::SQLiteDataSource():
                                 "did INTEGER PRIMARY KEY AUTOINCREMENT, "
                                 "hash_id INTEGER NOT NULL, "
                                 "url VARCHAR(100) NOT NULL, "
-                                "title VARCHAR(100),"
+                                "title VARCHAR(100) NOT NULL,"
                                 "UNIQUE (hash_id, url));"  << cppdb::exec;
                 sql << "CREATE TABLE IF NOT EXISTS term("
                                 "tid INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -154,21 +155,47 @@ engine::SQLiteDataSource::force_transaction()
 void
 engine::SQLiteDataSource::find_documents_by_terms(const std::vector<Term>& terms, std::vector<Document>& docs)
 {
-    cppdb::statement stat;
-    try {
-        for (Term term : terms) {
-            stat = sql << "SELECT D.did, D.url, D.title FROM "
-                                "(SELECT DISTINCT did FROM posting_list PL WHERE PL.tid = "
-                                        "(SELECT tid FROM term WHERE hash_id = ? AND str = ?)) AS SPL, document D WHERE D.did = SPL.did;";
-            stat.bind(term.get_hash_id());
-            stat.bind(term.get_content());
-            cppdb::result res = stat.query();
-            while (res.next()) {
-                docs.push_back(Document(res.get<std::string>("url"), "", 0));
-            }
-            stat.reset();
+        std::map<Document, std::set<Term>> all_docs;
+
+        try {
+                cppdb::statement stat = sql.prepare("SELECT D.url, D.title, PL.tf, T.str, T.idf FROM document D, posting_list PL, term T "
+                                                    "WHERE (T.hash_id = ? AND T.str = ?) AND T.tid = PL.tid AND D.did = PL.did;");
+
+                for (Term term : terms) {
+                        stat.bind(term.get_hash_id());
+                        stat.bind(term.get_content());
+                        cppdb::result res = stat.query();
+
+                        while (res.next()) {
+                                Document doc(res.get<std::string>("url"),
+                                             res.get<std::string>("title"),
+                                             0);
+                                Term term(res.get<std::string>("str"),
+                                          res.get<unsigned>("tf"),
+                                          res.get<unsigned>("idf"),
+                                          .0f,
+                                          0);
+
+                                auto found = all_docs.find(doc);
+                                if (found != all_docs.end()) {
+                                        found->second.insert(term);
+                                } else {
+                                        std::set<Term> terms;
+                                        terms.insert(term);
+                                        all_docs.insert(std::pair<Document, std::set<Term>>(doc, terms));
+                                }
+                        }
+                        stat.reset();
+                }
+        } catch (std::exception const &e) {
+                std::cerr << e.what() << std::endl;
         }
-    } catch (std::exception const &e) {
-            std::cerr << e.what() << std::endl;
-    }
+
+        for (auto it = all_docs.begin(); it != all_docs.end(); ++ it) {
+                Document doc = it->first;
+                for (auto jt = it->second.begin(); jt != it->second.end(); ++ jt) {
+                        doc.add_term(*jt);
+                }
+                docs.push_back(doc);
+        }
 }

@@ -22,14 +22,15 @@ public:
         void                    	add_term(const Term& term);
         void				reset_terms();
         const std::vector<Term>& 	get_terms() const;
+        void				set_importance(float importance);
 
         bool operator<(const Document& rhs) const;
 private:
-        const uint64_t		m_hash_id;
-        const std::string 	m_url;
-        const std::string 	m_heading;
-        const float 		m_importance;
-        std::vector<Term> 	m_terms;
+        const uint64_t			m_hash_id;
+        const std::string 		m_url;
+        const std::string 		m_heading;
+        float 				m_importance;
+        mutable std::vector<Term> 	m_terms;
 };
 
 };
