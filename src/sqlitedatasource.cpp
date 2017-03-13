@@ -1,4 +1,5 @@
 #include <vector>
+#include <set>
 #include <iostream>
 
 #include "sqlitedatasource.h"
@@ -16,64 +17,92 @@ engine::SQLiteDataSource::~SQLiteDataSource()
 {
 }
 
-void engine::SQLiteDataSource::destroy()
+void
+engine::SQLiteDataSource::destroy()
 {
         sql << "DELETE FROM document;" << cppdb::exec;
         sql << "DELETE FROM term;" << cppdb::exec;
         sql << "DELETE FROM posting_list;" << cppdb::exec;
 }
 
-void engine::SQLiteDataSource::add_documents(const std::vector<Document>& docs)
+void
+engine::SQLiteDataSource::add_documents(const std::vector<Document>& docs)
 {
-        cppdb::statement stat;
+        // Accumulate documents into buffer temporarily.
+        for (const Document& doc: docs)
+                buffer.push_back(doc);
 
-        for (Document doc : docs) {
-
-                stat = sql << "INSERT INTO document(did, url, title) "
-                              "VALUES(?, ?, ?);";
-
-                stat.bind(doc.get_id());
-                stat.bind(doc.get_url());
-                stat.bind(doc.get_heading());
-
-                stat.exec();
-
-                std::vector<Term> terms = doc.get_terms();
-
-                stat = sql << "INSERT INTO term(tid, str, idf) "
-                              "VALUES(?, ?, ?);";
-
-                for (Term term : terms) {
-                        stat.bind(term.get_id());
-                        stat.bind(term.get_content());
-                        stat.bind(term.get_frequency());
-
-                        try {
-                                stat.exec();
-                        } catch (std::exception const &e) {
-                        }
-                        stat.reset();
-                }
-        }
-
-        for (Document doc : docs) {
-                stat = sql << "INSERT INTO posting_list(tid, did, tf) "
-                              "VALUES(?, ?, ?);";
-                for (Term term : doc.get_terms()) {
-                        stat.bind(term.get_id());
-                        stat.bind(doc.get_id());
-                        stat.bind(term.get_frequency());
-
-                        try {
-                                stat.exec();
-                        } catch (std::exception const &e) {
-                        }
-                        stat.reset();
-                }
-        }
+        if (buffer.size() >= MAX_BUFFER_SIZE)
+                force_transaction();
 }
 
-void engine::SQLiteDataSource::find_documents_by_terms(const std::vector<Term>& terms, std::vector<Document>& docs)
+void
+engine::SQLiteDataSource::force_transaction()
+{
+        if (buffer.empty())
+                return;
+
+        cppdb::transaction guard(sql);
+        cppdb::statement doc_insert = sql.prepare("INSERT INTO document(did, url, title) "
+                                                  "VALUES (?, ?, ?);");
+        cppdb::statement term_insert = sql.prepare("INSERT INTO term(tid, str, idf) "
+                                                   "VALUES(?, ?, ?);");
+        cppdb::statement pl_insert = sql.prepare("INSERT INTO posting_list(tid, did, tf) "
+                                                 "VALUES(?, ?, ?);");
+
+        std::set<Term> all_terms;
+
+        // Save documents.
+        for (const Document& doc : buffer) {
+                doc_insert.bind(doc.get_id());
+                doc_insert.bind(doc.get_url());
+                doc_insert.bind(doc.get_heading());
+
+                doc_insert.exec();
+                doc_insert.reset();
+
+                // Collect terms.
+                for (const Term& term: doc.get_terms())
+                        all_terms.insert(term);
+        }
+
+        // Handle terms.
+        for (const Term& term: all_terms) {
+                term_insert.bind(term.get_id());
+                term_insert.bind(term.get_content());
+                term_insert.bind(term.get_idf());
+
+                try {
+                        // May be repetition.
+                        term_insert.exec();
+                } catch (std::exception const &e) {
+                }
+                term_insert.reset();
+        }
+
+        // Handle sparse matrix.
+        for (const Document& doc : buffer) {
+                for (const Term& term : doc.get_terms()) {
+                        pl_insert.bind(term.get_id());
+                        pl_insert.bind(doc.get_id());
+                        pl_insert.bind(term.get_frequency());
+
+                        try {
+                                pl_insert.exec();
+                        } catch (std::exception const &e) {
+                        }
+                        pl_insert.reset();
+                }
+        }
+
+        guard.commit();
+
+        // Reset buffer.
+        buffer.clear();
+}
+
+void
+engine::SQLiteDataSource::find_documents_by_terms(const std::vector<Term>& terms, std::vector<Document>& docs)
 {
     cppdb::statement stat;
     try {
