@@ -40,6 +40,12 @@ engine::Term::get_content() const
 }
 
 unsigned
+engine::Term::get_idf() const
+{
+        return  m_idf;
+}
+
+unsigned
 engine::Term::get_frequency() const
 {
         return m_freq;

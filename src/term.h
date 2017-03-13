@@ -100,6 +100,7 @@ public:
         void 			set_idf(unsigned idf);
         void 			set_tf(unsigned tf);
         const std::string& 	get_content() const;
+        unsigned 		get_idf() const;
         unsigned 		get_frequency() const;
         float           	compute_tfidf(unsigned n_docs) const;
         unsigned		get_position() const;
