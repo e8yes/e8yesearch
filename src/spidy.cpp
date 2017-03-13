@@ -1,35 +1,33 @@
-#include "spidy.h"
 #include <boost/filesystem.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <iostream>
 #include <vector>
 #include <sstream>
 #include <string>
-#include <xercesc/util/PlatformUtils.hpp>
 
-#include <xercesc/dom/DOM.hpp>
 
 #include <xercesc/framework/StdOutFormatTarget.hpp>
 #include <xercesc/framework/LocalFileFormatTarget.hpp>
-#include <xercesc/parsers/XercesDOMParser.hpp>
+#include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/util/XMLString.hpp>
+
+
 #include <boost/locale.hpp>
 #include <locale>         // std::wstring_convert
 #include <codecvt>        // std::codecvt_utf8
 
+#include "spidy.h"
+
 typedef boost::iterator_range<boost::filesystem::directory_iterator> 	dir_range_iter_t;
 typedef boost::filesystem::directory_iterator				dir_iter_t;
-
 
 // Token Iterator
 engine::support::SpidyTokenIterator::SpidyTokenIterator()
 {
-        xercesc::XMLPlatformUtils::Initialize();
 }
 
 engine::support::SpidyTokenIterator::~SpidyTokenIterator()
 {
-        xercesc::XMLPlatformUtils::Terminate();
 }
 
 bool
@@ -58,6 +56,26 @@ engine::support::SpidyTokenIterator::add(const std::string& token)
 // Document Iterator
 engine::support::SpidyDocIterator::SpidyDocIterator()
 {
+        xercesc::XMLPlatformUtils::Initialize();
+
+        static const XMLCh gLS[] = {xercesc::chLatin_L,
+                                    xercesc::chLatin_S,
+                                    xercesc::chNull};
+        xercesc::DOMImplementation *impl = xercesc::DOMImplementationRegistry::getDOMImplementation(gLS);
+        xercesc::DOMLSParser       *parser = ((xercesc::DOMImplementationLS*)impl)->createLSParser(xercesc::DOMImplementationLS::MODE_SYNCHRONOUS, 0);
+        xercesc::DOMConfiguration  *config = parser->getDomConfig();
+
+        config->setParameter(xercesc::XMLUni::fgDOMNamespaces, false);
+        config->setParameter(xercesc::XMLUni::fgXercesSchema, false);
+        config->setParameter(xercesc::XMLUni::fgXercesHandleMultipleImports, true);
+        config->setParameter(xercesc::XMLUni::fgXercesSchemaFullChecking, false);
+
+        this->parser = parser;
+}
+
+engine::support::SpidyDocIterator::~SpidyDocIterator()
+{
+        xercesc::XMLPlatformUtils::Terminate();
 }
 
 std::string
@@ -178,30 +196,23 @@ engine::support::SpidyDocIterator::parse()
 
         std::string curr_file = this->file_names[this->current_position ++];
 
-        xercesc::XercesDOMParser xercesDomParser;
-
         xercesc::DOMDocument* domDoc;
         xercesc::DOMElement* root;
         try {
-                xercesDomParser.parse(curr_file.c_str());
-        } catch (xercesc::XMLException& e) {
+                this->parser->resetDocumentPool();
+                domDoc = this->parser->parseURI(curr_file.c_str());
+        } catch (...) {
                 ::parse_as_text(curr_file, spidyTokenIterator);
                 return spidyTokenIterator;
         }
-        if (nullptr != (domDoc = xercesDomParser.getDocument())) {
-                if (nullptr != (root = domDoc->getDocumentElement())) {
-                        ::loop(root, *spidyTokenIterator);
-                        return spidyTokenIterator;
-                }
+        if (nullptr != (root = domDoc->getDocumentElement())) {
+                ::loop(root, *spidyTokenIterator);
+                return spidyTokenIterator;
         }
 
         // Fallback to plain text search.
         ::parse_as_text(curr_file, spidyTokenIterator);
         return spidyTokenIterator;
-}
-
-engine::support::SpidyDocIterator::~SpidyDocIterator()
-{
 }
 
 // Spidy crawl

@@ -16,12 +16,11 @@ class UnitTest : public QObject
 public:
         UnitTest();
 
-
+        void testSpidy();
         void testDB();
         void testLocalDataGatherer();
-        void testQueryParser();
 private Q_SLOTS:
-        void testSpidy();
+        void testQueryParser();
 };
 
 UnitTest::UnitTest()
@@ -31,7 +30,7 @@ UnitTest::UnitTest()
 void UnitTest::testSpidy()
 {
         engine::support::Spidy spidy;
-        engine::support::IDocumentIterator* doc_iter = spidy.crawl("TestDir");
+        engine::support::IDocumentIterator* doc_iter = spidy.crawl("WEBPAGES_SIMPLE");
 
         while (doc_iter->has_next()) {
                 std::cout << "Processing new document:" << doc_iter->get_descriptor() << std::endl;
@@ -74,7 +73,7 @@ void UnitTest::testLocalDataGatherer()
 
 void UnitTest::testQueryParser()
 {
-    std::string query = "letter";
+    std::string query = "letter of science";
     //std::getline(std::cin, query);
     std::cout << "Input your query: " << query << std::endl;
 
@@ -82,11 +81,6 @@ void UnitTest::testQueryParser()
     engine::TextQuery textQuery = spidyParser.parse(query);
 
     engine::IDataSource* iDataSource = new engine::SQLiteDataSource();
-    /*iDataSource->destroy();
-    engine::support::Spidy spidy;
-    engine::LocalDataGatherer gatherer(&spidy, iDataSource);
-    gatherer.run("WEBPAGES_RAW");*/
-
     engine::spidyTextSearch spidyTextSearch(iDataSource);
     engine::sorted_results_t documents;
     spidyTextSearch.find(textQuery, documents);
