@@ -73,7 +73,7 @@ void UnitTest::testLocalDataGatherer()
 
 void UnitTest::testQueryParser()
 {
-    std::string query = "letter of science";
+    std::string query = "computer";
     //std::getline(std::cin, query);
     std::cout << "Input your query: " << query << std::endl;
 
