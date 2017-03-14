@@ -1,0 +1,21 @@
+body {
+        background-color: black;
+}
+
+button.ghost {
+        background-color: Transparent; 
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        outline: none;
+}
+
+.form-search {
+        margin: 0;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%)
+}
+
