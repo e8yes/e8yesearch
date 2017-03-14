@@ -5,6 +5,10 @@
 	},
 	"http" : {
 		"script" : "/e8yesearch"
-	}
+	},
+	"file_server" : {
+		"enable" : true,
+		"document_root" : "."
+	},
 }
 

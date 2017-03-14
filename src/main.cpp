@@ -1,5 +1,6 @@
-#include <cppcms/applications_pool.h>
 #include <iostream>
+#include <cppcms/applications_pool.h>
+#include <booster/intrusive_ptr.h>
 #include "e8yesearch.h"
 
 
@@ -8,7 +9,8 @@ int main(int argc, char *argv[])
         try {
                 std::cout << "Starting service..." << std::endl;
                 cppcms::service srv(argc, argv);
-                srv.applications_pool().mount(cppcms::applications_factory<web::E8yeSearch>());
+                booster::intrusive_ptr<web::E8yeSearch> app = new web::E8yeSearch(srv);
+                srv.applications_pool().mount(app);
                 std::cout << "Mounted to application pool." << std::endl;
                 std::cout << "Running." << std::endl;
                 srv.run();
