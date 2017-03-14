@@ -17,8 +17,8 @@ public:
         UnitTest();
 
         void testDB();
-private Q_SLOTS:
         void testSpidy();
+private Q_SLOTS:
         void testLocalDataGatherer();
         void testQueryParser();
 };
@@ -89,7 +89,8 @@ void UnitTest::testQueryParser()
             std::cout << "No matched document found" << std::endl;
     } else {
         for (engine::Document doc : documents) {
-            std::cout << doc.get_url() << std::endl;
+            std::cout << doc.get_url() << "---" << doc.get_importance() << std::endl;
+
         }
     }
 
