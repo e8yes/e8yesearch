@@ -199,3 +199,19 @@ engine::SQLiteDataSource::find_documents_by_terms(const std::vector<Term>& terms
                 docs.push_back(doc);
         }
 }
+
+engine::Term*
+engine::SQLiteDataSource::findTermByContent(const std::string& content)
+{
+    try {
+        cppdb::statement stat = sql.prepare("SELECT * FROM term WHERE term.str = UPPER(?);");
+        stat.bind(content);
+        cppdb::result res = stat.query();
+        if (res.next()) {
+            return new engine::Term(content, 1, res.get<unsigned>("idf"), 0.0, 0);
+        }
+    } catch (std::exception const &e) {
+        std::cerr << e.what() << std::endl;
+    }
+    return nullptr;
+}

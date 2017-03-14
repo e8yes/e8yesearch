@@ -29,3 +29,9 @@ void
 engine::BPTreeDataSource::force_transaction()
 {
 }
+
+engine::Term*
+engine::BPTreeDataSource::findTermByContent(const std::string& content)
+{
+
+}
