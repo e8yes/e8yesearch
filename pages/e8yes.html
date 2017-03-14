@@ -1,15 +1,21 @@
 <html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html charset=UTF-8"/>
-</head>
-<body>
-  <h1 align="center"> E8yes Search Engine</h1>
-  <div align="center">
-    <form action="/Search" method="POST">
-    <div class="form-input">
-        <input class="input" type="text">
-    </div>
-    <input type="submit" value="Go!">
-  </div>
-</body>
+        <head>
+                <meta http-equiv="Content-Type" content="text/html charset=UTF-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="stylesheet" type="text/css" href="../css/theme.css">
+                <title>e8yesearch</title>
+        </head>
+        <body>
+                <div class="container">
+                        <form class="form-search" action="/Search" method="POST">
+
+                                <div>
+                                        <input class="input" name="query" type="text" placeholder="e8yes">
+                                        <button class="ghost">
+                                                <img src="../img/logo.png" />
+                                        </button>
+                                </div>
+                        </form>
+                </div>
+        </body>
 </html>
