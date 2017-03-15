@@ -31,7 +31,7 @@ engine::BPTreeDataSource::force_transaction()
 }
 
 engine::Term*
-engine::BPTreeDataSource::findTermByContent(const std::string& content)
+engine::BPTreeDataSource::find_term_by_content(const std::string& content)
 {
 
 }

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <limits>
 #include <cmath>
+#include "utils.h"
 #include "sqlitedatasource.h"
 
 void engine::SQLiteDataSource::load_terms()
@@ -222,7 +223,7 @@ engine::SQLiteDataSource::find_documents_by_terms(const std::vector<Term>& terms
 }
 
 engine::Term*
-engine::SQLiteDataSource::findTermByContent(const std::string& content)
+engine::SQLiteDataSource::find_term_by_content(const std::string& content)
 {
     try {
         cppdb::statement stat = sql.prepare("SELECT * FROM term WHERE term.str = UPPER(?);");
@@ -237,41 +238,14 @@ engine::SQLiteDataSource::findTermByContent(const std::string& content)
     return nullptr;
 }
 
-unsigned
-ed(const std::string& a, const std::string& b)
-{
-    const unsigned a_len = static_cast<unsigned>(a.length()), b_len = static_cast<unsigned>(b.length());
-
-    if (a_len == 0) return b_len;
-    if (b_len == 0) return a_len;
-
-    unsigned i, j, i_prv, i_crt, d[2][b_len + 1];
-
-    for (j = 0; j <= b_len; j++) {
-        d[0][j] = j;
-    }
-    i_prv = 0;
-    i_crt = 1;
-    for (i = 1; i <= a_len; i++) {
-        d[i_crt][0] = i;
-        for (j = 1; j <= b_len; j++) {
-            d[i_crt][j] = std::min(std::min(d[i_prv][j] + 1,d[i_crt][j-1] + 1), d[i_prv][j-1] + (a[i-1] == b[j-1] ? 0 : 1));
-        }
-        i_prv = i_prv ? 0 : 1;
-        i_crt = i_crt ? 0 : 1;
-    }
-
-    return d[i_prv][b_len];
-}
-
 
 engine::Term*
-engine::SQLiteDataSource::findTermByFuzzyContent(const std::string& content)
+engine::SQLiteDataSource::find_term_by_fuzzy_content(const std::string& content)
 {
     unsigned min = std::numeric_limits<unsigned>::max();
     Term const* min_term = nullptr;
     for (const Term& term : this->term_set) {
-        unsigned ed = ::ed(content, term.get_content());
+        unsigned ed = util::ed(content, term.get_content());
         if (ed < min) {
             min_term = &term;
             min = ed;

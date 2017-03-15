@@ -14,7 +14,8 @@ namespace engine
 namespace util
 {
 
-uint64_t hash(const char* s, uint64_t seed = 0);
+uint64_t 	hash(const char* s, uint64_t seed = 0);
+unsigned 	ed(const std::string& a, const std::string& b);
 
 }
 

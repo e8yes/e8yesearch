@@ -14,9 +14,9 @@ void engine::spidyTextSearch::find(const TextQuery& text, sorted_results_t& resu
 {
     std::set<Term> query_terms;
     for (Term query_term : text.get_query()) {
-        Term* term = this->m_data_source.findTermByContent(query_term.get_content());
+        Term* term = this->m_data_source.find_term_by_content(query_term.get_content());
         if (term == nullptr)
-            term = this->m_data_source.findTermByFuzzyContent(query_term.get_content());
+            term = this->m_data_source.find_term_by_fuzzy_content(query_term.get_content());
         if (term != nullptr)
             query_terms.insert(*term);
     }
