@@ -24,13 +24,15 @@
                 <div class="form-result">
                         <h4>Your query is: <% c++ out() << content.query; %>.</h4>
                         <h4><% c++ out() << content.docs.size(); %> documents retrieved.</h4>
-                        <% c++ for (unsigned i = 0; i < 10; i ++) { %>
+
+                        <% c++ for (unsigned i = 0; i < 10 && i < content.docs.size(); i ++) { %>
                                 <div class="result-cell">
                                         <% c++ const std::string& heading = content.docs[i].get_heading(); %>
                                         <% c++ const std::string& url = content.docs[i].get_url(); %>
+                                        <% c++ float importance = content.docs[i].get_importance(); %>
 
-                                        <h3 class="search-heading"><% c++ out() << heading; %></h3>
-                                        <a class="search-link" href="<% c++ out() << url; %>"><% c++ out() << url; %></a>
+                                        <h3 class="search-heading"><% c++ out() << heading; %> score: <% c++ out() << importance; %></h3>
+                                        <a class="search-link" target="_blank" href="<% c++ out() << url; %>"><% c++ out() << url; %></a>
                                         <div class="result-snippet">No description.</div>
                                 </div>
                         <% c++ } %>
