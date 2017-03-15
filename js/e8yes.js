@@ -2,7 +2,11 @@
 // UIs.
 var query_text_box = $("#query_text_box");
 var query_submit_button = $("#query_submit_button");
-var query_result_area = ("#query_result_area");
+var query_result_area = $("#query_result_area");
+
+var doc_path_text_box = $("#doc_path_text_box");
+var doc_path_submit_button = $("#doc_path_submit_button");
+var width_progress_bar = $("#width_progress_bar");
 
 // Vars.
 var query = "";

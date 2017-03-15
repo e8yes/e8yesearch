@@ -88,6 +88,13 @@ a.hide:hover {
         transition: 0.5s;
 }
 
+.glowing-border:hover {
+        outline: none;
+        border-color: #9ecaed;
+        box-shadow: 0 0 40px #9ecaed;
+        transition: 0.5s;
+}
+
 .form-search {
         margin: 0;
         position: absolute;
