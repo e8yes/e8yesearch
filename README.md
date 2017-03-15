@@ -21,9 +21,28 @@ Note: "make install" requires root privilege.
 ###### boost
 ```
 apt-get install libboost-dev
+apt-get install libboost-test-dev
 ```
 
 ###### Xerces-C++
 ```
 apt-get install libxerces-c-dev
 ```
+
+###### JSON Spirit
+Download the source code from:
+https://github.com/cierelabs/json_spirit
+
+run the following
+```
+mkdir build
+cd build
+cmake .. -G "Unix Makefiles"
+make
+# Now install the include files and libraries to the system path
+cp libjson.a /usr/local/lib
+cd ../ciere
+cp json /usr/local/include
+```
+
+(Some of the commands may require root privilege, unix environment is assumed).
