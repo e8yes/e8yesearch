@@ -25,6 +25,7 @@ class E8yeSearch : public cppcms::application
 {
 public:
         E8yeSearch(cppcms::service &srv);
+
 private:
         void search();
         void tunnel();

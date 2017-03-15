@@ -10,12 +10,14 @@
                         e8yesTunnel
                 </a>
 
-                <div class="form-search">
-                        <input class="search-box glowing-border" id="query_text_box" type="text" placeholder="e8yes" autofocus>
-                        <button class="ghost" id="query_submit_button">
-                                <img src="../img/logo.png" />
-                        </button>
-                </div>
+                <form action="/e8yesearch" method="POST">
+                        <div class="form-search">
+                                <input class="search-box glowing-border" name="query" id="query_text_box" type="text" placeholder="e8yes" autofocus>
+                                <button class="ghost" id="query_submit_button">
+                                        <img src="../img/logo.png" />
+                                </button>
+                        </div>
+                </form>
 
                 <script type="text/javascript" src="../js/jquery.js"></script>
                 <script type="text/javascript" src="../js/jquery-ui.js"></script>

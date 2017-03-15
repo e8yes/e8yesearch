@@ -16,7 +16,7 @@ namespace my_skin {
 		}
 		#line 4 "pages/result.html"
 		virtual void render() {
-			#line 23 "pages/result.html"
+			#line 25 "pages/result.html"
 			out()<<"  \n"
 				"\n"
 				"<html>\n"
@@ -26,20 +26,22 @@ namespace my_skin {
 				"\n"
 				"                <link rel=\"stylesheet\" type=\"text/css\" href=\"../css/theme.css\">\n"
 				"\n"
-				"                <title>e8yesearch - inject</title>\n"
+				"                <title>e8yesearch - result</title>\n"
 				"        </head>\n"
 				"\n"
 				"        <body>\n"
-				"                <img src=\"../img/logo.png\" />\n"
+				"                <a href=\"/e8yesearch\">\n"
+				"                        <img src=\"../img/logo.png\" />\n"
+				"                </a>\n"
 				"                <input class=\"input\" id=\"query_text_box\" type=\"text\" placeholder=\"e8yes\">\n"
 				"\n"
 				"                <div class=\"form-result\" id=\"query_result_area\"></div>\n"
 				"\n"
 				"                <script type=\"text/javascript\">\n"
 				"                        var result_documents = JSON.parse(\"";
-			#line 23 "pages/result.html"
-			out()<<cppcms::filters::escape(content.json_docs);
-			#line 32 "pages/result.html"
+			#line 25 "pages/result.html"
+			out()<<cppcms::filters::raw(content.json_docs);
+			#line 34 "pages/result.html"
 			out()<<"\");\n"
 				"                </script>\n"
 				"\n"
@@ -50,31 +52,31 @@ namespace my_skin {
 				"</html>\n"
 				"\n"
 				"";
-		#line 32 "pages/result.html"
+		#line 34 "pages/result.html"
 		} // end of template render
-	#line 33 "pages/result.html"
+	#line 35 "pages/result.html"
 	}; // end of class result_documents
-#line 34 "pages/result.html"
+#line 36 "pages/result.html"
 } // end of namespace my_skin
-#line 35 "pages/result.html"
+#line 37 "pages/result.html"
 namespace {
-#line 35 "pages/result.html"
+#line 37 "pages/result.html"
  cppcms::views::generator my_generator; 
-#line 35 "pages/result.html"
+#line 37 "pages/result.html"
  struct loader { 
-#line 35 "pages/result.html"
+#line 37 "pages/result.html"
   loader() { 
-#line 35 "pages/result.html"
+#line 37 "pages/result.html"
    my_generator.name("my_skin");
-#line 35 "pages/result.html"
+#line 37 "pages/result.html"
    my_generator.add_view<my_skin::result_documents,result::result_documents>("result_documents",true);
-#line 35 "pages/result.html"
+#line 37 "pages/result.html"
     cppcms::views::pool::instance().add(my_generator);
-#line 35 "pages/result.html"
+#line 37 "pages/result.html"
  }
-#line 35 "pages/result.html"
+#line 37 "pages/result.html"
  ~loader() {  cppcms::views::pool::instance().remove(my_generator); }
-#line 35 "pages/result.html"
+#line 37 "pages/result.html"
 } a_loader;
-#line 35 "pages/result.html"
+#line 37 "pages/result.html"
 } // anon 

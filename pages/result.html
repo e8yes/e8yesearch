@@ -10,17 +10,19 @@
 
                 <link rel="stylesheet" type="text/css" href="../css/theme.css">
 
-                <title>e8yesearch - inject</title>
+                <title>e8yesearch - result</title>
         </head>
 
         <body>
-                <img src="../img/logo.png" />
+                <a href="/e8yesearch">
+                        <img src="../img/logo.png" />
+                </a>
                 <input class="input" id="query_text_box" type="text" placeholder="e8yes">
 
                 <div class="form-result" id="query_result_area"></div>
 
                 <script type="text/javascript">
-                        var result_documents = JSON.parse("<%=json_docs%>");
+                        var result_documents = JSON.parse("<%=json_docs | raw %>");
                 </script>
 
                 <script type="text/script" src="../js/jquery.js"></script>

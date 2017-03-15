@@ -16,39 +16,9 @@ var nitem_per_page = 10;
 var tunnel_refresh_id;
 
 
-// Query page.
-function post_query() {
-        $.ajax({
-                url: "/e8yesearch",
-                type: "POST",
-                data: {
-                        query: query,
-                        limit: nitem_per_page,
-                        page_num: curr_page_num 
-                },
-                success: function(result) {
-                        console.log(result);
-                },
-                error: function(xhr, s, e) {
-                        console.log(xhr);
-                }
-        });
-}
-
-query_submit_button.on("click", function (e) {
-        query = query_text_box.val();
-        post_query();
-});
-
-query_text_box.on("keypress", function (e) {
-        if (e.keyCode === 13) {
-                // Enter key pressed.
-                query = query_text_box.val();
-                post_query();
-        }
-});
 
 // Query result.
+console.log(result_documents);
 
 // Tunnel.
 function post_tunnel() {
