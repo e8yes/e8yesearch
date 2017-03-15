@@ -28,7 +28,7 @@ void engine::spidyTextSearch::find(const TextQuery& text, sorted_results_t& resu
             auto found = query_terms.find(term_in_doc);
             if (found != query_terms.end()) {
                 double tf_idf = std::log(term_in_doc.get_frequency()) *
-                              std::log(static_cast<float>(this->m_data_source.get_num_doc())/found->get_idf());
+                              std::log(static_cast<float>(this->m_data_source.document_count())/found->get_idf());
                 doc.set_importance(static_cast<float>(tf_idf));
             }
         }

@@ -69,11 +69,13 @@ void UnitTest::testLocalDataGatherer()
 
         engine::LocalDataGatherer gatherer(&spidy, &sqliteDataSource);
         gatherer.run("WEBPAGES_SIMPLE");
+
+        std::cout << "#Documents: " << sqliteDataSource.document_count() << std::endl;
 }
 
 void UnitTest::testQueryParser()
 {
-    std::string query = "computer";
+    std::string query = "compter";
     //std::getline(std::cin, query);
     std::cout << "Input your query: " << query << std::endl;
 

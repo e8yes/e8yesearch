@@ -30,8 +30,17 @@ engine::BPTreeDataSource::force_transaction()
 {
 }
 
+unsigned
+engine::BPTreeDataSource::document_count()
+{
+}
+
 engine::Term*
 engine::BPTreeDataSource::find_term_by_content(const std::string& content)
 {
+}
 
+engine::Term*
+engine::BPTreeDataSource::find_term_by_fuzzy_content(const std::string& content)
+{
 }

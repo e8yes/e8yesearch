@@ -16,6 +16,7 @@ class Term
         friend std::ostream& operator<<(std::ostream& os, const Term& term);
 public:
         enum Location {
+                Any,
                 Title,		// 0.7
                 Heading1,	// 0.68
                 Heading2,	// 0.66
@@ -79,6 +80,7 @@ public:
                 case Cite:
                         return .5f;
 
+                case Any:
                 case Division:
                         return 0.3f;
                 case Paragraph:

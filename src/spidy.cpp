@@ -1,6 +1,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <sstream>
 #include <string>
