@@ -1,14 +1,22 @@
 #ifndef SPIDYPARSER_H
 #define SPIDYPARSER_H
+
+#include "idatasource.h"
 #include "iqueryparser.h"
 
-namespace engine {
-class spidyQueryHandler:public IQueryParser
+
+namespace engine
+{
+
+class SpidyQueryHandler: public IQueryParser
 {
 public:
-    spidyQueryHandler();
-    ~spidyQueryHandler();
-    TextQuery parse(const std::string& squery);
+        SpidyQueryHandler(IDataSource* ds);
+        ~SpidyQueryHandler();
+        TextQuery parse(const std::string& squery);
+private:
+        IDataSource*	m_ds;
 };
+
 }
 #endif // SPIDYPARSER_H

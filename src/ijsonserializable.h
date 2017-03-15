@@ -1,7 +1,7 @@
 #ifndef IJSONSERIALIZABLE_H
 #define IJSONSERIALIZABLE_H
 
-#include <json/value.hpp>
+#include <ciere/json/value.hpp>
 
 namespace engine
 {

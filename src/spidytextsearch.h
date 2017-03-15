@@ -11,7 +11,7 @@ class SpidyTextSearch: public ITextSearch
 {
 public:
         SpidyTextSearch(IDataSource* ds);
-        TextQuery	find(const TextQuery& text, sorted_results_t& result);
+        void	find(const TextQuery& text, sorted_results_t& result);
 };
 
 }

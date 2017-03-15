@@ -12,7 +12,7 @@ web::App::App()
         m_spider = new engine::support::Spidy();
         m_gatherer = new engine::LocalDataGatherer(m_spider, m_ds);
         m_searcher = new engine::SpidyTextSearch(m_ds);
-        m_parser = new engine::spidyQueryHandler();
+        m_parser = new engine::SpidyQueryHandler(m_ds);
 }
 
 web::App::~App()
@@ -27,7 +27,8 @@ std::string
 web::App::search(const std::string& query, engine::sorted_results_t& result)
 {
         engine::TextQuery tquery = m_parser->parse(query);
-        return m_searcher->find(tquery, result).to_query_string();
+        m_searcher->find(tquery, result);
+        return tquery.to_query_string();
 }
 
 void

@@ -16,7 +16,7 @@ class ITextSearch
 public:
         ITextSearch(IDataSource& data_source);
         virtual ~ITextSearch();
-        virtual TextQuery	find(const TextQuery& text, sorted_results_t& result) = 0;
+        virtual void find(const TextQuery& text, sorted_results_t& result) = 0;
 protected:
         IDataSource& m_data_source;
 };

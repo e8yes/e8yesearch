@@ -1,11 +1,10 @@
 TEMPLATE = app
-TEMPLATE = lib
+#TEMPLATE = lib
 CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += src/main.cpp \
-    src/e8yesearch.cpp \
     src/textquery.cpp \
     src/itextsearch.cpp \
     src/iqueryparser.cpp \
@@ -21,7 +20,12 @@ SOURCES += src/main.cpp \
     src/localdatagatherer.cpp \
     src/bptreedatasource.cpp \
     src/spidytextsearch.cpp \
-    src/spidyqueryhandler.cpp
+    src/spidyqueryhandler.cpp \
+    src/cpphtml/result.cpp \
+    src/app.cpp \
+    src/appweb.cpp \
+    src/ijsonserializable.cpp \
+    src/ibagofwords.cpp
 
 LIBS += -lcppcms -lbooster
 LIBS += -lxerces-c
@@ -38,7 +42,6 @@ LIBS += -lboost_system -lboost_filesystem
 }
 
 HEADERS += \
-    src/e8yesearch.h \
     src/textquery.h \
     src/itextsearch.h \
     src/iqueryparser.h \
@@ -55,11 +58,17 @@ HEADERS += \
     src/bptreedatasource.h \
     src/mapbptree.h \
     src/spidytextsearch.h \
-    src/spidyqueryhandler.h
+    src/spidyqueryhandler.h \
+    src/cpphtml/result.h \
+    src/app.h \
+    src/appweb.h \
+    src/ijsonserializable.h \
+    src/ibagofwords.h
 
 LIBS += -lcppcms -lbooster
 LIBS += -lxerces-c
 LIBS += -lcppdb
+LIBS += -ljson
 
 macx {
         INCLUDEPATH += /usr/local/include
