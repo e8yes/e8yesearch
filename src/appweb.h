@@ -1,5 +1,5 @@
-#ifndef E8YESEARCH_H
-#define E8YESEARCH_H
+#ifndef APPWEB_H
+#define APPWEB_H
 
 #include <set>
 
@@ -13,9 +13,13 @@
 #include <cppcms/http_request.h>
 #include <cppcms/http_context.h>
 
+#include "app.h"
+
 
 namespace web
 {
+
+typedef std::set<booster::shared_ptr<cppcms::http::context>> waiters_type;
 
 class E8yeSearch : public cppcms::application
 {
@@ -25,10 +29,10 @@ private:
         void search();
         void tunnel();
 
-        typedef std::set<booster::shared_ptr<cppcms::http::context>> waiters_type;
-        waiters_type waiters;
+        waiters_type 	waiters;
+        App		app;
 };
 
 }
 
-#endif // E8YESEARCH_H
+#endif // APPWEB_H

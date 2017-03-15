@@ -107,12 +107,12 @@ public:
         unsigned		get_position() const;
         bool			operator<(const Term& term) const;
 private:
-        const term_id_t		m_hash_id;
-        const std::string	m_content;
+        term_id_t		m_hash_id;
+        std::string		m_content;
         unsigned 		m_freq = 0;
         unsigned		m_idf = 0;
-        const float 		m_lweight;
-        const unsigned 		m_local_pos;
+        float 			m_lweight;
+        unsigned 		m_local_pos;
 };
 
 std::ostream& operator<<(std::ostream& os, const Term& term);

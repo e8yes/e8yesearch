@@ -13,8 +13,10 @@ engine::LocalDataGatherer::~LocalDataGatherer()
 }
 
 void
-engine::LocalDataGatherer::compute_idf(const std::string& directory, idf_t& idf) const
+engine::LocalDataGatherer::compute_idf(const std::string& directory, idf_t& idf)
 {
+        m_num_docs = 0;
+
         support::IDocumentIterator* doc_iter = m_spider->crawl(directory);
         while (doc_iter->has_next()) {
                 // Collect terms.
@@ -31,15 +33,17 @@ engine::LocalDataGatherer::compute_idf(const std::string& directory, idf_t& idf)
                         if (it != idf.end())	it->second ++;
                         else			idf.insert(idf_entry_t(term, 1));
                 }
+
+                m_num_docs ++;
         }
         delete doc_iter;
 }
 
 void
-engine::LocalDataGatherer::run(const std::string& directory)
+engine::LocalDataGatherer::add_documents(const std::string& directory, const idf_t& idf)
 {
-        idf_t idf;
-        compute_idf(directory, idf);
+        float curr_pro = m_progress;
+        unsigned i_doc = 0;
 
         // Gather terms and put into data source.
         support::IDocumentIterator* doc_iter = m_spider->crawl(directory);
@@ -69,7 +73,26 @@ engine::LocalDataGatherer::run(const std::string& directory)
                 std::vector<Document> docs;
                 docs.push_back(curr_doc);
                 m_ds->add_documents(docs);
+
+                m_progress = curr_pro + (1 - curr_pro)*static_cast<float>(++ i_doc)/m_num_docs;
         }
         m_ds->force_transaction();
         delete doc_iter;
+}
+
+void
+engine::LocalDataGatherer::run(const std::string& directory)
+{
+        m_progress = .1f;
+        idf_t idf;
+        compute_idf(directory, idf);
+
+        m_progress = .5f;
+        add_documents(directory, idf);
+}
+
+float
+engine::LocalDataGatherer::progress()
+{
+        return m_progress;
 }

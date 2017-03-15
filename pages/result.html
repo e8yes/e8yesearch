@@ -1,6 +1,6 @@
-<% c++ #include "content.h" %>  
+<% c++ #include "result.h" %>  
 <% skin my_skin %>  
-<% view message uses content::message %>  
+<% view result_documents uses result::result_documents %>  
 <% template render() %>  
 
 <html>
@@ -20,7 +20,7 @@
                 <div class="form-result" id="query_result_area"></div>
 
                 <script type="text/javascript">
-                        var result_documents = JSON.parse("<%=result_documents%>");
+                        var result_documents = JSON.parse("<%=json_docs%>");
                 </script>
 
                 <script type="text/script" src="../js/jquery.js"></script>

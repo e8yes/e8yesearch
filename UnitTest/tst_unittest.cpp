@@ -75,26 +75,26 @@ void UnitTest::testLocalDataGatherer()
 
 void UnitTest::testQueryParser()
 {
-    std::string query = "compter";
-    //std::getline(std::cin, query);
-    std::cout << "Input your query: " << query << std::endl;
+        std::string query = "compter";
+        //std::getline(std::cin, query);
+        std::cout << "Input your query: " << query << std::endl;
 
-    engine::spidyQueryHandler spidyParser;
-    engine::TextQuery textQuery = spidyParser.parse(query);
+        engine::spidyQueryHandler spidyParser;
+        engine::TextQuery textQuery = spidyParser.parse(query);
 
-    engine::IDataSource* iDataSource = new engine::SQLiteDataSource();
-    engine::spidyTextSearch spidyTextSearch(iDataSource);
-    engine::sorted_results_t documents;
-    spidyTextSearch.find(textQuery, documents);
+        engine::IDataSource* iDataSource = new engine::SQLiteDataSource();
+        engine::SpidyTextSearch spidyTextSearch(iDataSource);
+        engine::sorted_results_t documents;
+        spidyTextSearch.find(textQuery, documents);
 
-    if (documents.empty()) {
-            std::cout << "No matched document found" << std::endl;
-    } else {
-        for (engine::Document doc : documents) {
-            std::cout << doc.get_url() << "---" << doc.get_importance() << std::endl;
+        if (documents.empty()) {
+                std::cout << "No matched document found" << std::endl;
+        } else {
+                for (engine::Document doc : documents) {
+                        std::cout << doc.get_url() << "---" << doc.get_importance() << std::endl;
 
+                }
         }
-    }
 
 }
 

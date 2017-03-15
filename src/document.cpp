@@ -7,6 +7,10 @@ engine::Document::Document(const std::string& url, const std::string& heading, f
 {
 }
 
+engine::Document::~Document()
+{
+}
+
 engine::doc_id_t
 engine::Document::get_hash_id() const
 {
@@ -59,4 +63,13 @@ const std::vector<engine::Term>&
 engine::Document::get_terms() const
 {
         return m_terms;
+}
+
+ciere::json::value
+engine::Document::to_json() const
+{
+        ciere::json::value val;
+        val["m_url"] = m_url;
+        val["m_heading"] = m_heading;
+        return val;
 }

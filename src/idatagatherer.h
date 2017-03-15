@@ -13,6 +13,7 @@ public:
         virtual ~IDataGatherer();
 
         virtual void run(const std::string& directory) = 0;
+        virtual float progress();
 };
 
 }

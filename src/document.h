@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "ijsonserializable.h"
 #include "term.h"
 
 namespace engine
@@ -10,10 +11,11 @@ namespace engine
 
 typedef uint64_t doc_id_t;
 
-class Document
+class Document: public util::IJsonSerializable
 {
 public:
         Document(const std::string& url, const std::string& heading, float importance);
+        ~Document() override;
 
         doc_id_t			get_hash_id() const;
         const std::string&		get_url() const;
@@ -23,6 +25,8 @@ public:
         void                    	add_term(const Term& term);
         void				reset_terms();
         const std::vector<Term>& 	get_terms() const;
+
+        ciere::json::value		to_json() const override;
 
         bool operator<(const Document& rhs) const;
 private:

@@ -46,17 +46,6 @@
 }
 
 .fill-1 {
-        animation: fill-1 0.5s ease-out 0s;
-        animation-fill-mode: forwards;
         width: 0%;
 }
 
-
-@keyframes fill-1 {
-        0% {
-                width: 0%;
-        }
-        100% {
-                width: 70%;
-        }
-}

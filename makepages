@@ -1,0 +1,2 @@
+all:
+	cppcms_tmpl_cc pages/result.html -o src/cpphtml/result.cpp 
