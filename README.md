@@ -24,6 +24,11 @@ apt-get install libboost-dev
 apt-get install libboost-test-dev
 ```
 
+###### Eigen
+```
+apt-get install libeigen3-dev
+```
+
 ###### Xerces-C++
 ```
 apt-get install libxerces-c-dev
