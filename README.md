@@ -46,8 +46,8 @@ cmake .. -G "Unix Makefiles"
 make
 # Now install the include files and libraries to the system path
 cp libjson.a /usr/local/lib
-cd ../ciere
-cp json /usr/local/include
+cd ..
+cp ciere /usr/local/include
 ```
 
 (Some of the commands may require root privilege, unix environment is assumed).
