@@ -105,8 +105,14 @@ a.hide:hover {
 }
 
 .form-result {
-        margin-left: 20px;
+        margin-top: 40px;
+        margin-left: 5%;
         color: white;
+}
+
+div.result-cell {
+        margin-top: 40px;
+        margin-bottom: 40px;
 }
 
 a.result-link {

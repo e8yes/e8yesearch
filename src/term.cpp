@@ -39,6 +39,12 @@ engine::Term::set_tf(unsigned tf)
 }
 
 void
+engine::Term::set_pos(unsigned p)
+{
+        m_local_pos = p;
+}
+
+void
 engine::Term::set_idf(unsigned idf)
 {
         m_idf = idf;
@@ -69,7 +75,7 @@ engine::Term::compute_tfidf(unsigned n_docs) const
 }
 
 unsigned
-engine::Term::get_position() const
+engine::Term::get_pos() const
 {
         return m_local_pos;
 }

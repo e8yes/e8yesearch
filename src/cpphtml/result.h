@@ -1,15 +1,21 @@
 #ifndef RESULT_H
 #define RESULT_H
 
-#include <cppcms/view.h>
+
 #include <string>
+#include <cppcms/view.h>
+
+#include "../itextsearch.h"
+#include "../document.h"
+
 
 namespace result
 {
 
 struct result_documents: public cppcms::base_content
 {
-        std::string json_docs;
+        engine::sorted_results_t docs;
+        std::string query;
 };
 
 }

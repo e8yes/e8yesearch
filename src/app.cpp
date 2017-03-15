@@ -23,11 +23,11 @@ web::App::~App()
         delete m_searcher;
 }
 
-void
+std::string
 web::App::search(const std::string& query, engine::sorted_results_t& result)
 {
         engine::TextQuery tquery = m_parser->parse(query);
-        m_searcher->find(tquery, result);
+        return m_searcher->find(tquery, result).to_query_string();
 }
 
 void

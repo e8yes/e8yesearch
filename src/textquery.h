@@ -9,11 +9,11 @@ class TextQuery
 public:
         TextQuery();
 
-        const std::vector<Term>& get_query() const;
-        void add_query(const Term& term);
-
+        const std::vector<Term>& 	query_terms() const;
+        void 				add_term(const Term& term);
+        std::string			to_query_string() const;
 private:
-        std::vector<Term> query;
+        std::vector<Term> 		terms;
 };
 
 }

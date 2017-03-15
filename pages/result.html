@@ -14,16 +14,27 @@
         </head>
 
         <body>
-                <a href="/e8yesearch">
-                        <img src="../img/logo.png" />
-                </a>
-                <input class="input" id="query_text_box" type="text" placeholder="e8yes">
+                <form action="/e8yesearch" method="POST">
+                        <a href="/e8yesearch">
+                                <img src="../img/logo.png" />
+                        </a>
+                        <input class="search-box glowing-border" name="query" id="query_text_box" type="text" placeholder="e8yes" autofocus>
+                </form>
 
-                <div class="form-result" id="query_result_area"></div>
+                <div class="form-result">
+                        <h4>Your query is: <% c++ out() << content.query; %>.</h4>
+                        <h4><% c++ out() << content.docs.size(); %> documents retrieved.</h4>
+                        <% c++ for (unsigned i = 0; i < 10; i ++) { %>
+                                <div class="result-cell">
+                                        <% c++ const std::string& heading = content.docs[i].get_heading(); %>
+                                        <% c++ const std::string& url = content.docs[i].get_url(); %>
 
-                <script type="text/javascript">
-                        var result_documents = JSON.parse("<%=json_docs | raw %>");
-                </script>
+                                        <h3 class="search-heading"><% c++ out() << heading; %></h3>
+                                        <a class="search-link" href="<% c++ out() << url; %>"><% c++ out() << url; %></a>
+                                        <div class="result-snippet">No description.</div>
+                                </div>
+                        <% c++ } %>
+                </div>
 
                 <script type="text/script" src="../js/jquery.js"></script>
                 <script type="text/script" src="../js/jquery-ui.js"></script>

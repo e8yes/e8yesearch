@@ -7,11 +7,11 @@
 namespace engine
 {
 
-class SpidyTextSearch:public ITextSearch
+class SpidyTextSearch: public ITextSearch
 {
 public:
         SpidyTextSearch(IDataSource* ds);
-        void	find(const TextQuery& text, sorted_results_t& result);
+        TextQuery	find(const TextQuery& text, sorted_results_t& result);
 };
 
 }

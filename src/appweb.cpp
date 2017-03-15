@@ -48,18 +48,10 @@ web::E8yeSearch::search()
         if (request().request_method() == "POST") {
                 // Search.
                 const std::string& query = request().post("query");
-                engine::sorted_results_t docs;
-                app.search(query, docs);
+                result::result_documents page;
+                page.query = app.search(query, page.docs);
 
                 // Render.
-                ciere::json::value json;
-                ::to_json(docs, json);
-                std::stringstream ss;
-                ss << json;
-
-                result::result_documents page;
-                ss >> page.json_docs;
-
                 render("result_documents", page);
         } else {
                 // Home.

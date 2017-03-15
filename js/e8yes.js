@@ -15,10 +15,7 @@ var nitem_per_page = 10;
 
 var tunnel_refresh_id;
 
-
-
 // Query result.
-console.log(result_documents);
 
 // Tunnel.
 function post_tunnel() {

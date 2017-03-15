@@ -1,17 +1,36 @@
+#include <algorithm>
 #include "textquery.h"
+
 
 engine::TextQuery::TextQuery()
 {
 
 }
 
-const std::vector<engine::Term>& engine::TextQuery::get_query() const
+const std::vector<engine::Term>&
+engine::TextQuery::query_terms() const
 {
-        return this->query;
+        return terms;
 }
 
 
-void engine::TextQuery::add_query(const engine::Term& term)
+void
+engine::TextQuery::add_term(const engine::Term& term)
 {
-        this->query.push_back(term);
+        terms.push_back(term);
+}
+
+
+std::string
+engine::TextQuery::to_query_string() const
+{
+        std::vector<Term> ts = terms;
+        std::sort(ts.begin(), ts.end(), [](const Term& a, const Term& b) {
+                return a.get_pos() < b.get_pos();
+        });
+        std::string s;
+        for (const Term& term: ts) {
+                s += term.get_content() + " ";
+        }
+        return s;
 }

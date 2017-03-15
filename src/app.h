@@ -22,9 +22,9 @@ public:
         App();
         ~App();
 
-        void 	search(const std::string& query, engine::sorted_results_t& result);
-        void 	tunnel_local(const std::string& descriptor);
-        float 	progress(Task task) const;
+        std::string	search(const std::string& query, engine::sorted_results_t& result);
+        void 		tunnel_local(const std::string& descriptor);
+        float 		progress(Task task) const;
 private:
         engine::ITextSearch*		m_searcher;
         engine::IDataSource* 		m_ds;
