@@ -10,6 +10,84 @@ button.ghost {
         outline: none;
 }
 
+button.inject {
+        background-color: transparent;
+        border-radius: 12px;
+        border-color: gray;
+        color: gray;
+        text-align: center;
+        font-size: 16pt;
+        padding: 20px;
+        width: 150px;
+        transition: all 0.5s;
+        cursor: pointer;
+        margin: 5px;
+}
+
+button.inject span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: 0.5s;
+}
+
+button.inject span:after {
+        content: '\00bb';
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        right: -20px;
+        transition: 0.5s;
+}
+
+button.inject:hover span {
+        padding-right: 25px;
+}
+
+button.inject:hover span:after {
+        opacity: 1;
+        right: 0;
+}
+
+a.hide:link {
+        text-decoration: none;
+        font-size: 20pt;
+        font-family: serif;
+        color: black;
+        margin-left: 15px;
+        margin-top: 20px;
+}
+
+a.hide:visited {
+        color: black;
+}
+
+a.hide:hover {
+        color: gray;
+        transition: 0.5s;
+}
+
+.search-box {
+        width: 400px;
+        height: 50px;
+        color: gray;
+        font-size: 16pt;
+        transition: 0.5s;
+}
+
+.glowing-border {
+        border: 2px solid #dadada;
+        border-radius: 7px;
+        transition: 0.5s;
+}
+
+.glowing-border:focus { 
+        outline: none;
+        border-color: #9ecaed;
+        box-shadow: 0 0 40px #9ecaed;
+        transition: 0.5s;
+}
+
 .form-search {
         margin: 0;
         position: absolute;
@@ -19,3 +97,16 @@ button.ghost {
         transform: translate(-50%, -50%)
 }
 
+.form-result {
+        margin-left: 20px;
+        color: white;
+}
+
+a.result-link {
+}
+
+div.result-heading {
+}
+
+div.result-snippet {
+}

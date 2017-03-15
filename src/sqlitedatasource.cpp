@@ -2,6 +2,7 @@
 #include <set>
 #include <map>
 #include <iostream>
+#include <limits>
 #include <cmath>
 #include "sqlitedatasource.h"
 
@@ -237,7 +238,7 @@ engine::SQLiteDataSource::findTermByContent(const std::string& content)
 }
 
 unsigned
-calculate_edit_distance(const std::string& a, const std::string& b)
+ed(const std::string& a, const std::string& b)
 {
     const unsigned a_len = static_cast<unsigned>(a.length()), b_len = static_cast<unsigned>(b.length());
 
@@ -267,10 +268,10 @@ calculate_edit_distance(const std::string& a, const std::string& b)
 engine::Term*
 engine::SQLiteDataSource::findTermByFuzzyContent(const std::string& content)
 {
-    unsigned min = 0xFFFFFFFF;
+    unsigned min = std::numeric_limits<unsigned>::max();
     Term const* min_term = nullptr;
     for (const Term& term : this->term_set) {
-        unsigned ed = calculate_edit_distance(content, term.get_content());
+        unsigned ed = ::ed(content, term.get_content());
         if (ed < min) {
             min_term = &term;
             min = ed;
@@ -294,15 +295,3 @@ engine::SQLiteDataSource::get_num_doc()
     }
     return 1;
 }
-
-
-
-
-
-
-
-
-
-
-
-

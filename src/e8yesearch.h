@@ -22,9 +22,8 @@ class E8yeSearch : public cppcms::application
 public:
         E8yeSearch(cppcms::service &srv);
 private:
-        void redirect();
-        void get();
-        void post();
+        void search();
+        void tunnel();
 
         typedef std::set<booster::shared_ptr<cppcms::http::context>> waiters_type;
         waiters_type waiters;
