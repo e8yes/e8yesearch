@@ -1,27 +1,41 @@
-#include "spidyqueryhandler.h"
 #include <sstream>
+#include "utils.h"
+#include "spidyqueryhandler.h"
 
-engine::spidyQueryHandler::spidyQueryHandler()
+engine::SpidyQueryHandler::SpidyQueryHandler(IDataSource* ds):
+        m_ds(ds)
 {
-
 }
 
-engine::TextQuery engine::spidyQueryHandler::parse(const std::string& query)
+engine::TextQuery engine::SpidyQueryHandler::parse(const std::string& query)
 {
-        TextQuery textQuery;
         std::stringstream sstream;
         sstream << query;
+        std::vector<std::string> contents;
 
-        unsigned i = 0;
         while (sstream.good()) {
                 std::string temp_str;
                 sstream >> temp_str;
-                textQuery.add_term(Term(temp_str, Term::Heading1, i ++));
+                contents.push_back(temp_str);
         }
-        return textQuery;
+
+        TextQuery tquery;
+        for (unsigned i = 0; i < contents.size(); i ++) {
+                const std::string& content = util::toupper(contents[i]);
+                Term term;
+                bool has_term = m_ds->find_term_by_content(content, term);
+                if (!has_term)
+                        has_term = m_ds->find_term_by_fuzzy_content(content, term);
+
+                if (has_term) {
+                        term.set_pos(i);
+                        tquery.add_term(term);
+                }
+        }
+        return tquery;
 }
 
 
-engine::spidyQueryHandler::~spidyQueryHandler()
+engine::SpidyQueryHandler::~SpidyQueryHandler()
 {
 }

@@ -10,6 +10,19 @@ engine::util::hash(const char* s, uint64_t seed)
         return hash;
 }
 
+static const std::locale loc;
+
+std::string
+engine::util::toupper(const std::string& content)
+{
+        std::string upper;
+        upper.resize(content.size());
+        for (unsigned i = 0; i < content.size();i ++) {
+                upper[i] = std::toupper(content[i], loc);
+        }
+        return upper;
+}
+
 unsigned
 engine::util::ed(const std::string& a, const std::string& b)
 {

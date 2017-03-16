@@ -94,6 +94,7 @@ public:
                 }
         }
 
+        Term();
         Term(const std::string& content, Location location, unsigned position);
         Term(const std::string& content, unsigned freq, unsigned idf, float locational_weight, unsigned position);
 

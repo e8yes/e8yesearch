@@ -4,25 +4,18 @@
 #include "term.h"
 
 
-static const std::locale loc;
-
-static std::string toupper(const std::string& content)
+engine::Term::Term():
+        m_hash_id(0), m_content(""), m_lweight(NAN), m_local_pos(0)
 {
-        std::string upper;
-        upper.resize(content.size());
-        for (unsigned i = 0; i < content.size();i ++) {
-                upper[i] = std::toupper(content[i], loc);
-        }
-        return upper;
 }
 
 engine::Term::Term(const std::string& content, Location location, unsigned position):
-    m_hash_id(util::hash(toupper(content).c_str())), m_content(toupper(content)), m_lweight(positional_weight(location)), m_local_pos(position)
+    m_hash_id(util::hash(util::toupper(content).c_str())), m_content(util::toupper(content)), m_lweight(positional_weight(location)), m_local_pos(position)
 {
 }
 
 engine::Term::Term(const std::string& content, unsigned freq, unsigned idf, float locational_weight, unsigned position):
-    m_hash_id(util::hash(toupper(content).c_str())), m_content(content), m_freq(freq), m_idf(idf), m_lweight(locational_weight), m_local_pos(position)
+    m_hash_id(util::hash(util::toupper(content).c_str())), m_content(content), m_freq(freq), m_idf(idf), m_lweight(locational_weight), m_local_pos(position)
 {
 }
 

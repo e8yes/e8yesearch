@@ -80,7 +80,7 @@ void UnitTest::testQueryParser()
         //std::getline(std::cin, query);
         std::cout << "Input your query: " << query << std::endl;
 
-        engine::spidyQueryHandler spidyParser;
+        engine::SpidyQueryHandler spidyParser;
         engine::TextQuery textQuery = spidyParser.parse(query);
 
         engine::IDataSource* iDataSource = new engine::SQLiteDataSource();

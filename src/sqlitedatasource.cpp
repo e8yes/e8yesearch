@@ -240,25 +240,27 @@ engine::SQLiteDataSource::find_documents_by_terms(const std::vector<Term>& terms
         }
 }
 
-engine::Term*
-engine::SQLiteDataSource::find_term_by_content(const std::string& content)
+bool
+engine::SQLiteDataSource::find_term_by_content(const std::string& content, Term& term)
 {
         try {
                 auto res = term_set.find(Term(content, Term::Location::Any, 0));
                 if (res != term_set.end()) {
-                        return new engine::Term(*res);
+                        term = *res;
+                        return true;
                 }
         } catch (std::exception const &e) {
                 std::cerr << e.what() << std::endl;
         }
-        return nullptr;
+        return false;
 }
 
-engine::Term*
-engine::SQLiteDataSource::find_term_by_fuzzy_content(const std::string& content)
+bool
+engine::SQLiteDataSource::find_term_by_fuzzy_content(const std::string& content, Term& term)
 {
         unsigned min = std::numeric_limits<unsigned>::max();
         Term const* min_term = nullptr;
+
         for (const Term& term : this->term_set) {
                 unsigned ed = util::ed(content, term.get_content());
                 if (ed < min) {
@@ -266,7 +268,18 @@ engine::SQLiteDataSource::find_term_by_fuzzy_content(const std::string& content)
                         min = ed;
                 }
         }
-        return min_term != nullptr ? new Term(*min_term) : nullptr;
+
+        if (min_term != nullptr && min <= 2) {
+                term = *min_term;
+                return true;
+        } else {
+                return false;
+        }
+}
+
+void
+engine::SQLiteDataSource::fill_bag_of_words(IBagOfWords* bow)
+{
 }
 
 unsigned

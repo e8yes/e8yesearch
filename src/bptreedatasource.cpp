@@ -35,12 +35,18 @@ engine::BPTreeDataSource::document_count()
 {
 }
 
-engine::Term*
-engine::BPTreeDataSource::find_term_by_content(const std::string& content)
+
+bool
+engine::BPTreeDataSource::find_term_by_content(const std::string& content, Term& term)
 {
 }
 
-engine::Term*
-engine::BPTreeDataSource::find_term_by_fuzzy_content(const std::string& content)
+bool
+engine::BPTreeDataSource::find_term_by_fuzzy_content(const std::string& content, Term& term)
+{
+}
+
+void
+engine::BPTreeDataSource::fill_bag_of_words(IBagOfWords* bow)
 {
 }
