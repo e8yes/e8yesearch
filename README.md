@@ -1,11 +1,11 @@
 # e8yesearch
 e8yes search engine.
 
-### Reqired libraries
-Unix environment is assumed.
-
 ### English Corpus Used
 http://www.anc.org/data/masc/downloads/data-download/
+
+### Reqired libraries
+Unix environment is assumed.
 
 ###### CPPCMS
 Download the CPPCMS source code from:
