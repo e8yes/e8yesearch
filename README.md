@@ -4,6 +4,9 @@ e8yes search engine.
 ### Reqired libraries
 Unix environment is assumed.
 
+### English Corpus Used
+http://www.anc.org/data/masc/downloads/data-download/
+
 ###### CPPCMS
 Download the CPPCMS source code from:
 https://sourceforge.net/projects/cppcms/files/cppcms/1.0.5/
