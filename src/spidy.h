@@ -32,7 +32,7 @@ public:
         SpidyDocIterator();
         ~SpidyDocIterator() override;
 
-        void 			add(std::string file_name);
+        void 			add(std::string file_name, std::string url);
         std::string             get_descriptor() const override;
         bool 			has_next() const override;
         ITokenIterator* 	parse() override;
@@ -41,6 +41,7 @@ private:
         xercesc::DOMLSParser*	parser;
         unsigned 			current_position = 0;
         std::vector<std::string> 	file_names;
+        std::vector<std::string>	urls;
 };
 
 class Spidy: public ISpider
@@ -48,6 +49,10 @@ class Spidy: public ISpider
 public:
         IDocumentIterator* crawl(const std::string& directory) override;
         ~Spidy() override;
+        std::map<std::string, std::string> get_path_url_map();
+private:
+        std::map<std::string, std::string> path_url_map;
+
 };
 
 }

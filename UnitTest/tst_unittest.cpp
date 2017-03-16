@@ -17,8 +17,9 @@ public:
         UnitTest();
 
         void testDB();
-        void testSpidy();
+
 private Q_SLOTS:
+        void testSpidy();
         void testLocalDataGatherer();
         void testQueryParser();
 };
