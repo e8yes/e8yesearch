@@ -34,3 +34,5 @@ build*
 UnitTest/WEBPAGES_SIMPLE/
 WEBPAGES_RAW/*
 UnitTest/WEBPAGES_RAW/*
+UnitTest/UnitTest.pro.user.orig
+e8yesearch.pro.user.orig

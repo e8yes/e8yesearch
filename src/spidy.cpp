@@ -219,16 +219,22 @@ engine::support::SpidyDocIterator::parse()
 
 // Spidy crawl
 static void
-crawl(const boost::filesystem::path& dir, engine::support::SpidyDocIterator* doc_it)
+crawl(const boost::filesystem::path& dir,
+     engine::support::SpidyDocIterator* doc_it,
+     const std::map<std::string, std::string>& path_url_map)
 {
     if (boost::filesystem::is_directory(dir)) {
         dir_range_iter_t range = boost::make_iterator_range(boost::filesystem::directory_iterator(dir), {});
         for(dir_iter_t it = range.begin(); it != range.end(); ++ it) {
-            ::crawl(it->path(), doc_it);
+            ::crawl(it->path(), doc_it, path_url_map);
         }
     } else {
-        engine::support::Spidy spidy;
-        doc_it->add(dir.string(), spidy.get_path_url_map().at(dir.string()));
+        auto it = path_url_map.find(dir.string());
+        if (it != path_url_map.end()) {
+            doc_it->add(dir.string(), it->second);
+        } else {
+            doc_it->add(dir.string(), dir.string());
+        }
     }
 }
 
@@ -236,19 +242,20 @@ engine::support::IDocumentIterator*
 engine::support::Spidy::crawl(const std::string &directory)
 {
     std::string path, url;
-    std::ifstream my_file("UnitTest/WEBPAGES_SIMPLE/bookkeeping.tsv");
+    std::ifstream my_file(directory + "/bookkeeping.tsv");
+    std::map<std::string, std::string> path_url_map;
 
     if (my_file.is_open())
     {
         while (my_file.good()) {
             getline(my_file, path, '\t');
-            getline(my_file, url, '\t');
-            this->path_url_map.insert (std::pair<std::string, std::string>(path, url));
-            my_file.close();
+            getline(my_file, url);
+            path_url_map.insert (std::pair<std::string, std::string>(directory + "/" + path, url));
         }
+        my_file.close();
     }
     SpidyDocIterator* it= new SpidyDocIterator();
-    ::crawl(boost::filesystem::path(directory), it);
+    ::crawl(boost::filesystem::path(directory), it, path_url_map);
     return it;
 }
 

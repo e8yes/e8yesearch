@@ -1,5 +1,5 @@
 #include "utils.h"
-
+#include <locale>
 
 uint64_t
 engine::util::hash(const char* s, uint64_t seed)
