@@ -3,12 +3,12 @@
 
 #include <set>
 #include "term.h"
-#include "idatasource.h"
+#include "document.h"
 
+#include "idatasource.h"
 
 namespace engine
 {
-
 
 class BPTreeDataSource : public IDataSource
 {
@@ -25,6 +25,8 @@ public:
         bool 		find_term_by_fuzzy_content(const std::string& content, Term& term) override;
         void		fill_bag_of_words(IBagOfWords* bow) override;
 private:
+        struct InternalData;
+        InternalData*   m_dataimpl;
 };
 
 }

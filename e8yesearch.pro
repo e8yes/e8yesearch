@@ -1,5 +1,5 @@
 TEMPLATE = app
-TEMPLATE = lib
+#TEMPLATE = lib
 CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG -= qt
@@ -60,7 +60,10 @@ HEADERS += \
     src/app.h \
     src/appweb.h \
     src/ijsonserializable.h \
-    src/ibagofwords.h
+    src/ibagofwords.h \
+    src/bptreeinmemory.h \
+    src/mapbptreedef.h \
+    src/bptreeondisk.h
 
 LIBS += -lcppcms -lbooster
 LIBS += -lxerces-c

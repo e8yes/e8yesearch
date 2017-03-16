@@ -5,105 +5,21 @@
 #include <vector>
 #include <cstdint>
 
+#include "mapbptreedef.h"
+#include "bptreeinmemory.h"
+#include "bptreeondisk.h"
+
+namespace engine
+{
+
 namespace util
 {
-
-typedef uint16_t        csize_t;
-typedef uint32_t        dsize_t;
-typedef dsize_t         binode_t;
-typedef dsize_t         ptr_t;
-
-
-// In-memory data chunk.
-template<class V>
-class MapBPTreeInMemoryChunk
-{
-public:
-        const V&                read(const ptr_t& ptr) const;
-        void                    write(const ptr_t& ptr, const V& value);
-        void                    resize(dsize_t s);
-        dsize_t                 size() const;
-private:
-        std::vector<V>          m_chunk;
-};
-
-template<class V>
-const V&
-MapBPTreeInMemoryChunk<V>::read(const ptr_t& ptr) const
-{
-        return m_chunk[ptr];
-}
-
-template<class V>
-void
-MapBPTreeInMemoryChunk<V>::write(const ptr_t& ptr, const V& value)
-{
-        m_chunk[ptr] = value;
-}
-
-template<class V>
-void
-MapBPTreeInMemoryChunk<V>::resize(dsize_t s)
-{
-        m_chunk.resize(s);
-}
-
-template<class V>
-dsize_t
-MapBPTreeInMemoryChunk<V>::size() const
-{
-        return m_chunk.size();
-}
-
-// In-memory tree.
-template<class K> struct MapBPTreeNode;
-
-template<class K>
-class MapBPTreeInMemoryTree
-{
-public:
-        const MapBPTreeNode<K>&         read(const binode_t& node) const;
-        void                            write(const binode_t& node, const MapBPTreeNode<K>& value);
-        void                            resize(dsize_t s);
-        dsize_t                         size() const;
-private:
-        std::vector<MapBPTreeNode<K>>      m_nodes;
-};
-
-template<class K>
-const MapBPTreeNode<K>&
-MapBPTreeInMemoryTree<K>::read(const binode_t& node) const
-{
-        return m_nodes[node];
-}
-
-template<class K>
-void
-MapBPTreeInMemoryTree<K>::write(const binode_t& node, const MapBPTreeNode<K>& value)
-{
-        m_nodes[node] = value;
-}
-
-template<class K>
-void
-MapBPTreeInMemoryTree<K>::resize(dsize_t s)
-{
-        m_nodes.resize(s);
-}
-
-template<class K>
-dsize_t
-MapBPTreeInMemoryTree<K>::size() const
-{
-        return m_nodes.size();
-}
 
 // B+ Tree Map.
 template<class K>
 struct MapBPTreeNode
 {
         K               key;
-        csize_t         csize;
         ptr_t           ptr;
 };
 
@@ -114,12 +30,20 @@ private:
         class Iterator
         {
         public:
+                Iterator(binode_t n_start, dsize_t offset, const K& s, const K& e);
+
                 Iterator& 	operator++();
                 bool 		operator==(const Iterator& rhs) const;
                 bool 		operator!=(const Iterator& rhs) const;
 
                 bool 		operator*() const;
                 bool 		operator->() const;
+        private:
+                binode_t	n_start;
+                dsize_t		offset;
+
+                K		s;
+                K		e;
         };
 
 public:
@@ -147,7 +71,7 @@ private:
         void                    allocate(binode_t node);
         void                    free(binode_t node);
 
-        MapBPTreeNode<K>*       lookup(const K& key, binode_t& p);
+        bool 			lookup(const K& key, binode_t& p, csize_t& ib) const;
 
         Tree&                   m_tree;
         Chunk&                  m_chunk;
@@ -195,20 +119,38 @@ MapBPTree<K, V, b, Tree, Chunk>::free(binode_t node)
 }
 
 template<class K, class V, csize_t b, class Tree, class Chunk>
-MapBPTreeNode<K>*
-MapBPTree<K, V, b, Tree, Chunk>::lookup(const K& key, binode_t& p)
+bool
+MapBPTree<K, V, b, Tree, Chunk>::lookup(const K& key, binode_t& p, csize_t& ib) const
 {
         unsigned node = 0;
-        while (!is_exterior(node)) {
-                for (unsigned i = node; i < node + b; i ++) {
-                        const MapBPTreeNode<K>& e = m_tree.read(i);
-                        if (e.key < key) {
-                                node = child(node, i);
+        csize_t i = 0;
+        while (true) {
+                unsigned next;
+                unsigned i;
+                for (i = 0; i < b; i ++) {
+                        if (!m_tree.less_than(key, node + i)) {
+                                next = child(node, i);
                                 goto next_round;
                         }
                 }
-                node = child(node, b);
+                next = child(node, node + i);
 next_round:;
+                if (is_exterior(node))  break;
+                else                    node = next;
+        }
+        p = node;
+        ib = i;
+        if (i == 0)
+                // Invalid position.
+                return false;
+        else {
+                if (m_tree.equals(key, node + i - 1)) {
+                        // Valid but key is unequal.
+                        return true;
+                } else {
+                        // Equal key.
+                        return true;
+                }
         }
 }
 
@@ -295,6 +237,12 @@ MapBPTree<K, V, b, Tree, Chunk>::end()
 }
 
 template<class K, class V, csize_t b, class Tree, class Chunk>
+MapBPTree<K, V, b, Tree, Chunk>::Iterator::Iterator(binode_t n_start, dsize_t offset, const K& s, const K& e):
+        n_start(n_start), offset(offset), s(s), e(e)
+{
+}
+
+template<class K, class V, csize_t b, class Tree, class Chunk>
 typename MapBPTree<K, V, b, Tree, Chunk>::Iterator&
 MapBPTree<K, V, b, Tree, Chunk>::Iterator::operator++()
 {
@@ -322,6 +270,8 @@ template<class K, class V, csize_t b, class Tree, class Chunk>
 bool
 MapBPTree<K, V, b, Tree, Chunk>::Iterator::operator->() const
 {
+}
+
 }
 
 }

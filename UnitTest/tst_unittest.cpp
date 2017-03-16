@@ -16,14 +16,12 @@ class UnitTest : public QObject
 public:
         UnitTest();
 
-        void testDB();
-        void testQueryParser();
         void testSpidy();
-
-
-private Q_SLOTS:
+        void testSqliteDataSource();
         void testLocalDataGatherer();
-
+        void testSpidyTextQuery();
+private Q_SLOTS:
+        void testMapBPTree();
  };
 
 UnitTest::UnitTest()
@@ -47,7 +45,7 @@ void UnitTest::testSpidy()
         delete doc_iter;
 }
 
-void UnitTest::testDB()
+void UnitTest::testSqliteDataSource()
 {
         engine::SQLiteDataSource sqliteDataSource;
         sqliteDataSource.destroy();
@@ -75,7 +73,7 @@ void UnitTest::testLocalDataGatherer()
         std::cout << "#Documents: " << sqliteDataSource.document_count() << std::endl;
 }
 
-void UnitTest::testQueryParser()
+void UnitTest::testSpidyTextQuery()
 {
         std::string query = "compter";
         //std::getline(std::cin, query);
@@ -97,6 +95,10 @@ void UnitTest::testQueryParser()
                 }
         }
 
+}
+
+void UnitTest::testMapBPTree()
+{
 }
 
 QTEST_APPLESS_MAIN(UnitTest)
