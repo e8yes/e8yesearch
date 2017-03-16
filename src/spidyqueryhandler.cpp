@@ -28,8 +28,7 @@ engine::TextQuery engine::SpidyQueryHandler::parse(const std::string& query)
                         has_term = m_ds->find_term_by_fuzzy_content(content, term);
 
                 if (has_term) {
-                        term.set_pos(i);
-                        tquery.add_term(term);
+                        tquery.add_term(term, TermPosition(i, .0f));
                 }
         }
         return tquery;

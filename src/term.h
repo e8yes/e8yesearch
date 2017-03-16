@@ -95,28 +95,21 @@ public:
         }
 
         Term();
-        Term(const std::string& content, Location location, unsigned position);
-        Term(const std::string& content, unsigned freq, unsigned idf, float locational_weight, unsigned position);
+        Term(const std::string& content);
+        Term(const std::string& content, unsigned idf);
 
 
         void 			set_idf(unsigned idf);
-        void 			set_tf(unsigned tf);
-        void			set_pos(unsigned p);
 
         term_id_t		get_hash_id() const;
         const std::string& 	get_content() const;
         unsigned 		get_idf() const;
-        unsigned 		get_frequency() const;
-        float           	compute_tfidf(unsigned n_docs) const;
-        unsigned		get_pos() const;
+
         bool			operator<(const Term& term) const;
 private:
         term_id_t		m_hash_id;
         std::string		m_content;
-        unsigned 		m_freq = 0;
         unsigned		m_idf = 0;
-        float 			m_lweight;
-        unsigned 		m_local_pos;
 };
 
 std::ostream& operator<<(std::ostream& os, const Term& term);

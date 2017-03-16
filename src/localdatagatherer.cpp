@@ -22,9 +22,9 @@ engine::LocalDataGatherer::compute_idf(const std::string& directory, idf_t& idf)
                 // Collect terms.
                 std::set<Term> terms;
                 support::ITokenIterator* tok_iter = doc_iter->parse();
-                while (tok_iter->has_next()) {
-                        terms.insert(tok_iter->next());
-                }
+                while (tok_iter->has_next())
+                        terms.insert(tok_iter->next().first);
+
                 delete tok_iter;
 
                 // Update idf stats.
@@ -51,29 +51,16 @@ engine::LocalDataGatherer::add_documents(const std::string& directory, const idf
                 std::string descriptor = doc_iter->get_descriptor();
                 Document curr_doc(descriptor, "Unknown", 0.0f);
 
-                // Collect term frequency
+                // Put terms into document collect term frequency
                 support::ITokenIterator* tok_iter = doc_iter->parse();
-                std::map<Term, unsigned> terms_freq;
                 while (tok_iter->has_next()) {
-                        Term term = tok_iter->next();
-                        std::map<Term, unsigned>::iterator it = terms_freq.find(term);
-                        if (it != terms_freq.end())	it->second ++;
-                        else				terms_freq.insert(std::pair<Term, unsigned>(term, 1));
+                        term_pos_t termpos = tok_iter->next();
+                        termpos.first.set_idf(idf.at(termpos.first));
+                        curr_doc.add_term(termpos.first, termpos.second);
                 }
                 delete tok_iter;
 
-                // Put terms into document and save into data source.
-                for (std::map<Term, unsigned>::const_iterator it = terms_freq.begin(); it != terms_freq.end(); ++ it) {
-                        Term term = it->first;
-                        term.set_tf(it->second);
-                        term.set_idf(idf.at(term));
-                        curr_doc.add_term(term);
-                }
-
-                std::vector<Document> docs;
-                docs.push_back(curr_doc);
-                m_ds->add_documents(docs);
-
+                m_ds->add_document(curr_doc);
                 m_progress = curr_pro + (1 - curr_pro)*static_cast<float>(++ i_doc)/m_num_docs;
         }
         m_ds->force_transaction();

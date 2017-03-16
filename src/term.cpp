@@ -5,17 +5,17 @@
 
 
 engine::Term::Term():
-        m_hash_id(0), m_content(""), m_lweight(NAN), m_local_pos(0)
+        m_hash_id(0), m_content("")
 {
 }
 
-engine::Term::Term(const std::string& content, Location location, unsigned position):
-    m_hash_id(util::hash(util::toupper(content).c_str())), m_content(util::toupper(content)), m_lweight(positional_weight(location)), m_local_pos(position)
+engine::Term::Term(const std::string& content):
+    m_hash_id(util::hash(util::toupper(content).c_str())), m_content(util::toupper(content))
 {
 }
 
-engine::Term::Term(const std::string& content, unsigned freq, unsigned idf, float locational_weight, unsigned position):
-    m_hash_id(util::hash(util::toupper(content).c_str())), m_content(content), m_freq(freq), m_idf(idf), m_lweight(locational_weight), m_local_pos(position)
+engine::Term::Term(const std::string& content, unsigned idf):
+    m_hash_id(util::hash(util::toupper(content).c_str())), m_content(content), m_idf(idf)
 {
 }
 
@@ -23,18 +23,6 @@ engine::term_id_t
 engine::Term::get_hash_id() const
 {
         return m_hash_id;
-}
-
-void
-engine::Term::set_tf(unsigned tf)
-{
-        m_freq = tf;
-}
-
-void
-engine::Term::set_pos(unsigned p)
-{
-        m_local_pos = p;
 }
 
 void
@@ -55,24 +43,6 @@ engine::Term::get_idf() const
         return  m_idf;
 }
 
-unsigned
-engine::Term::get_frequency() const
-{
-        return m_freq;
-}
-
-float
-engine::Term::compute_tfidf(unsigned n_docs) const
-{
-        return static_cast<float>(m_freq)*std::log2(static_cast<float>(n_docs)/m_idf);
-}
-
-unsigned
-engine::Term::get_pos() const
-{
-        return m_local_pos;
-}
-
 bool
 engine::Term::operator<(const Term& term) const
 {
@@ -82,6 +52,6 @@ engine::Term::operator<(const Term& term) const
 std::ostream&
 engine::operator<<(std::ostream& os, const Term& term)
 {
-        os << "Term=[" << term.m_content << "," << term.m_freq << "," << term.m_idf << "," << term.m_local_pos << "," << term.m_lweight << "]";
+        os << "Term=[" << term.m_content << "," << term.m_idf << "]";
         return os;
 }

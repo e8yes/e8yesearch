@@ -16,8 +16,8 @@ public:
         SpidyTokenIterator();
         ~SpidyTokenIterator() override;
 
-        bool 	has_next() const override;
-        Term 	next() override;
+        bool            has_next() const override;
+        term_pos_t      next() override;
 
         void 	add(const std::string& token);
 
@@ -38,8 +38,8 @@ public:
         ITokenIterator* 	parse() override;
 
 private:
-        xercesc::DOMLSParser*	parser;
-        unsigned 			current_position = 0;
+        xercesc::DOMLSParser*           parser;
+        unsigned                        current_position = 0;
         std::vector<std::string> 	file_names;
 };
 

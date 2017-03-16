@@ -16,12 +16,12 @@ engine::BPTreeDataSource::destroy()
 }
 
 void
-engine::BPTreeDataSource::add_documents(const std::vector<Document>& docs)
+engine::BPTreeDataSource::add_document(const Document& doc)
 {
 }
 
 void
-engine::BPTreeDataSource::find_documents_by_terms(const std::vector<Term>& terms, std::vector<Document>& docs)
+engine::BPTreeDataSource::find_documents_by_terms(const std::vector<Term>& terms, std::set<Document>& docs)
 {
 }
 

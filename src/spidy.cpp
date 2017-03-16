@@ -40,12 +40,13 @@ engine::support::SpidyTokenIterator::has_next() const
         return true;
 }
 
-engine::Term
+engine::term_pos_t
 engine::support::SpidyTokenIterator::next()
 {
-        Term term(this->tokens[this->current_position], Term::Paragraph, this->current_position);
-        this->current_position++;
-        return term;
+        unsigned term_pos = this->current_position ++;
+        return term_pos_t(Term(this->tokens[term_pos]),
+                          TermPosition(term_pos,
+                                       Term::positional_weight(Term::Location::Any)));
 }
 
 void

@@ -1,20 +1,23 @@
 #ifndef TEXTQUERY_H
 #define TEXTQUERY_H
+
+#include <set>
 #include <vector>
 #include "term.h"
+#include "document.h"
 
-namespace engine{
-class TextQuery
+
+namespace engine
+{
+
+class TextQuery: public Document
 {
 public:
         TextQuery();
-
-        const std::vector<Term>& 	query_terms() const;
-        void 				add_term(const Term& term);
+        std::vector<Term>		query_terms() const;
         std::string			to_query_string() const;
-private:
-        std::vector<Term> 		terms;
 };
 
 }
+
 #endif // TEXTQUERY_H

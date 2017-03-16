@@ -12,25 +12,38 @@ engine::SpidyTextSearch::SpidyTextSearch(IDataSource* ds):
 }
 
 void
-engine::SpidyTextSearch::find(const TextQuery& query, sorted_results_t& result)
+engine::SpidyTextSearch::filter(const TextQuery& query, sorted_results_t& results)
 {
-        std::set<Term> query_terms;
-        for (const Term& t: query.query_terms())
-                query_terms.insert(t);
+}
 
-        m_data_source.find_documents_by_terms(query.query_terms(), result);
+void
+engine::SpidyTextSearch::rank(const TextQuery& query, sorted_results_t& results)
+{
+        const docterms_t& sterms = query.get_term_info();
 
-        for (Document& doc : result) {
-                for (Term term_in_doc : doc.get_terms()) {
-                        auto found = query_terms.find(term_in_doc);
-                        if (found != query_terms.end()) {
-                                double tf_idf = std::log(term_in_doc.get_frequency()) *
-                                                std::log(static_cast<float>(this->m_data_source.document_count())/found->get_idf());
+        for (Document& doc: results) {
+                for (const docterm_t& term_in_doc: doc.get_term_info()) {
+                        auto found = sterms.find(term_in_doc.first);
+                        if (found != sterms.end()) {
+                                double tf_idf = std::log(term_in_doc.second.tf()) *
+                                                std::log(static_cast<float>(this->m_data_source.document_count())/found->first.get_idf());
                                 doc.set_importance(static_cast<float>(tf_idf));
                         }
                 }
         }
+}
 
+void
+engine::SpidyTextSearch::find(const TextQuery& query, sorted_results_t& result)
+{
+        result.clear();
+
+        std::set<Document> related_docs;
+        m_data_source.find_documents_by_terms(query.query_terms(), related_docs);
+        result.insert(result.end(), related_docs.begin(), related_docs.end());
+
+        filter(query, result);
+        rank(query, result);
         std::sort(result.begin(), result.end(), [] (const Document& a, const Document& b) -> bool {
                 return a.get_importance() > b.get_importance();
         });

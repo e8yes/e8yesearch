@@ -47,22 +47,56 @@ engine::Document::operator<(const Document& rhs) const
         return m_hash_id != rhs.m_hash_id ? m_hash_id < rhs.m_hash_id : m_url < rhs.m_url;
 }
 
-void
-engine::Document::add_term(const Term& term)
+const engine::docterms_t&
+engine::Document::get_term_info() const
 {
-        m_terms.push_back(term);
+        return m_doc_terms;
+}
+
+engine::terms_pos_t
+engine::Document::get_terms_pos() const
+{
+        terms_pos_t tpos;
+        for (const docterm_t& docterm: m_doc_terms) {
+                const Term& term = docterm.first;
+                for (const TermPosition& pos: docterm.second.pos) {
+                        tpos.push_back(term_pos_t(term, pos));
+                }
+        }
+        return tpos;
+}
+
+unsigned
+engine::Document::get_tf(const Term& term) const
+{
+        auto iterm = m_doc_terms.find(term);
+        return iterm != m_doc_terms.end() ? iterm->second.tf(): 0;
+}
+
+void
+engine::Document::add_term(const Term& term, const TermPosition& pos)
+{
+        auto iterm = m_doc_terms.find(term);
+        if (iterm != m_doc_terms.end()) {
+                iterm->second.add_pos(pos);
+                // This cast is safe since term must have the same key, as iterm as the execution reaches this branch.
+                static_cast<engine::Term>(iterm->first) = term;
+        } else {
+                m_doc_terms.insert(docterm_t(term, DocTermInfo(pos)));
+        }
+}
+
+void
+engine::Document::add_term(const Term& term, const TermPosition& p, unsigned freq)
+{
+        add_term(term, p);
+        m_doc_terms.at(term).freq = freq;
 }
 
 void
 engine::Document::reset_terms()
 {
-        m_terms.clear();
-}
-
-const std::vector<engine::Term>&
-engine::Document::get_terms() const
-{
-        return m_terms;
+        m_doc_terms.clear();
 }
 
 ciere::json::value

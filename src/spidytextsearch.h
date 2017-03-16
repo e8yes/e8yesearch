@@ -12,6 +12,9 @@ class SpidyTextSearch: public ITextSearch
 public:
         SpidyTextSearch(IDataSource* ds);
         void	find(const TextQuery& text, sorted_results_t& result);
+private:
+        void	filter(const TextQuery& text, sorted_results_t& results);
+        void 	rank(const TextQuery& text, sorted_results_t& results);
 };
 
 }

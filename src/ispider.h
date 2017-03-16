@@ -4,6 +4,7 @@
 
 #include <string>
 #include "term.h"
+#include "document.h"
 
 namespace engine
 {
@@ -16,7 +17,7 @@ class ITokenIterator
 public:
         virtual ~ITokenIterator();
         virtual bool 		has_next() const = 0;
-        virtual Term		next() = 0;
+        virtual term_pos_t	next() = 0;
 };
 
 class IDocumentIterator
