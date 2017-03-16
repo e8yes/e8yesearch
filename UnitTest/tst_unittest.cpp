@@ -17,11 +17,14 @@ public:
         UnitTest();
 
         void testDB();
+        void testQueryParser();
         void testSpidy();
+
+
 private Q_SLOTS:
         void testLocalDataGatherer();
-        void testQueryParser();
-};
+
+ };
 
 UnitTest::UnitTest()
 {
@@ -79,10 +82,9 @@ void UnitTest::testQueryParser()
         //std::getline(std::cin, query);
         std::cout << "Input your query: " << query << std::endl;
 
-        engine::SpidyQueryHandler spidyParser;
-        engine::TextQuery textQuery = spidyParser.parse(query);
-
         engine::IDataSource* iDataSource = new engine::SQLiteDataSource();
+        engine::SpidyQueryHandler spidyParser(iDataSource);
+        engine::TextQuery textQuery = spidyParser.parse(query);
         engine::SpidyTextSearch spidyTextSearch(iDataSource);
         engine::sorted_results_t documents;
         spidyTextSearch.find(textQuery, documents);
