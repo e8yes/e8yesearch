@@ -15,7 +15,6 @@
 
 #include <boost/locale.hpp>
 #include <locale>         // std::wstring_convert
-#include <codecvt>        // std::codecvt_utf8
 
 #include "spidy.h"
 
