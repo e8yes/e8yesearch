@@ -27,18 +27,15 @@ SOURCES += src/main.cpp \
     src/ijsonserializable.cpp \
     src/ibagofwords.cpp
 
-LIBS += -lcppcms -lbooster
-LIBS += -lxerces-c
-LIBS += -lcppdb
 
 macx {
-INCLUDEPATH += /usr/local/include
-LIBS += -L/usr/local/lib
-LIBS += -lboost_system-mt -lboost_filesystem-mt
+        INCLUDEPATH += /usr/local/include
+        LIBS += -L/usr/local/lib
+        LIBS += -lboost_system-mt -lboost_filesystem-mt
 }
 
 unix:!macx {
-LIBS += -lboost_system -lboost_filesystem
+        LIBS += -lboost_system -lboost_filesystem
 }
 
 HEADERS += \
@@ -69,13 +66,3 @@ LIBS += -lcppcms -lbooster
 LIBS += -lxerces-c
 LIBS += -lcppdb
 LIBS += -ljson
-
-macx {
-        INCLUDEPATH += /usr/local/include
-        LIBS += -L/usr/local/lib
-        LIBS += -lboost_system-mt -lboost_filesystem-mt
-}
-
-unix:!macx {
-        LIBS += -lboost_system -lboost_filesystem
-}

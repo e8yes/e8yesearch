@@ -14,25 +14,25 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-
 SOURCES += tst_unittest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
+macx {
+        INCLUDEPATH += /usr/local/include
+        LIBS += -L/usr/local/lib
+        LIBS += -lboost_system-mt -lboost_filesystem-mt
+}
+
 unix:!macx {
-LIBS += -L$$PWD/../build -le8yesearch
+        LIBS += -lboost_system -lboost_filesystem
 }
 
-macx {
 LIBS += -L$$PWD/../build-e8yesearch -le8yesearch
-}
 
-macx {
-INCLUDEPATH += /usr/local/include
-LIBS += -L/usr/local/lib
-LIBS += -lboost_system-mt -lboost_filesystem-mt
-}
-
+LIBS += -lcppcms -lbooster
 LIBS += -lxerces-c
+LIBS += -lcppdb
+LIBS += -ljson
 
 INCLUDEPATH += $$PWD/''
 DEPENDPATH += $$PWD/''

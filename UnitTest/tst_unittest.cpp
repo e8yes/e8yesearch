@@ -40,7 +40,7 @@ void UnitTest::testSpidy()
 
                 engine::support::ITokenIterator* tok_iter = doc_iter->parse();
                 while (tok_iter->has_next()) {
-                        std::cout << "Token: " << tok_iter->next() << std::endl;
+                        std::cout << "Token: " << tok_iter->next().first << std::endl;
                 }
         }
 
@@ -56,12 +56,11 @@ void UnitTest::testDB()
         for (int i = 0; i < 10; i++) {
                 engine::Document doc("url_" + std::to_string(i), "title_"+ std::to_string(i), 0);
                 for (int j = 0; j < 3; j++) {
-                        engine::Term term("content_" + std::to_string(j), engine::Term::Location::Title, 0);
-                        doc.add_term(term);
+                        engine::Term term("content_" + std::to_string(j));
+                        doc.add_term(term, engine::TermPosition(j, 0));
                 }
-                test_docs.push_back(doc);
+                sqliteDataSource.add_document(doc);
         }
-        sqliteDataSource.add_documents(test_docs);
 }
 
 void UnitTest::testLocalDataGatherer()
