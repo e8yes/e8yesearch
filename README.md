@@ -1,6 +1,9 @@
 # e8yesearch
 e8yes search engine.
 
+### English Corpus Used
+http://www.anc.org/data/masc/downloads/data-download/
+
 ### Reqired libraries
 Unix environment is assumed.
 
