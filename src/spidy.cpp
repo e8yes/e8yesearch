@@ -197,24 +197,31 @@ engine::support::SpidyDocIterator::parse()
         SpidyTokenIterator* spidyTokenIterator = new SpidyTokenIterator();
 
         std::string curr_file = this->file_names[this->current_position ++];
+        std::cout << "Parsing " << curr_file << std::endl;
 
-        xercesc::DOMDocument* domDoc;
-        xercesc::DOMElement* root;
-        try {
-                this->parser->resetDocumentPool();
-                domDoc = this->parser->parseURI(curr_file.c_str());
-        } catch (...) {
-                ::parse_as_text(curr_file, spidyTokenIterator);
-                return spidyTokenIterator;
-        }
-        if (domDoc != nullptr && nullptr != (root = domDoc->getDocumentElement())) {
-                ::loop(root, *spidyTokenIterator);
-                return spidyTokenIterator;
-        }
+//        xercesc::DOMDocument* domDoc;
+//        xercesc::DOMElement* root;
+//        try {
+//                this->parser->resetDocumentPool();
+//                domDoc = this->parser->parseURI(curr_file.c_str());
+//        } catch (...) {
+//                ::parse_as_text(curr_file, spidyTokenIterator);
+//                return spidyTokenIterator;
+//        }
+//        if (domDoc != nullptr && nullptr != (root = domDoc->getDocumentElement())) {
+//                ::loop(root, *spidyTokenIterator);
+//                return spidyTokenIterator;
+//        }
 
         // Fallback to plain text search.
         ::parse_as_text(curr_file, spidyTokenIterator);
         return spidyTokenIterator;
+}
+
+void
+engine::support::SpidyDocIterator::finalize()
+{
+        std::sort(file_names.begin(), file_names.end());
 }
 
 // Spidy crawl
@@ -256,6 +263,7 @@ engine::support::Spidy::crawl(const std::string &directory)
         }
         SpidyDocIterator* it= new SpidyDocIterator();
         ::crawl(boost::filesystem::path(directory), it, path_url_map);
+        it->finalize();
         return it;
 }
 

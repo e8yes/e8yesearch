@@ -32,7 +32,7 @@
                                         <% c++ float importance = content.docs[i].get_importance(); %>
 
                                         <h3 class="search-heading"><% c++ out() << heading; %> score: <% c++ out() << importance; %></h3>
-                                        <a class="search-link" target="_blank" href="<% c++ out() << url; %>"><% c++ out() << url; %></a>
+                                        <a class="search-link" target="_blank" href="http://<% c++ out() << url; %>"><% c++ out() << url; %></a>
                                         <div class="result-snippet">No description.</div>
                                 </div>
                         <% c++ } %>

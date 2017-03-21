@@ -36,6 +36,7 @@ public:
         std::string             get_descriptor() const override;
         bool 			has_next() const override;
         ITokenIterator* 	parse() override;
+        void			finalize();
 
 private:
         xercesc::DOMLSParser*           parser;

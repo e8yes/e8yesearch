@@ -19,17 +19,19 @@ engine::SpidyTextSearch::filter(const TextQuery& query, sorted_results_t& result
 void
 engine::SpidyTextSearch::rank(const TextQuery& query, sorted_results_t& results)
 {
-        const docterms_t& sterms = query.get_term_info();
+        const docterms_t& qterms = query.get_term_info();
 
         for (Document& doc: results) {
+                double importance = .0f;
                 for (const docterm_t& term_in_doc: doc.get_term_info()) {
-                        auto found = sterms.find(term_in_doc.first);
-                        if (found != sterms.end()) {
+                        auto found = qterms.find(term_in_doc.first);
+                        if (found != qterms.end()) {
                                 double tf_idf = std::log(term_in_doc.second.tf()) *
                                                 std::log(static_cast<float>(this->m_data_source.document_count())/found->first.get_idf());
-                                doc.set_importance(static_cast<float>(tf_idf));
+                                importance += tf_idf;
                         }
                 }
+                doc.set_importance(static_cast<float>(importance));
         }
 }
 

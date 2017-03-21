@@ -80,7 +80,7 @@ namespace my_skin {
 			out() << importance; 
 			#line 35 "pages/result.html"
 			out()<<"</h3>\n"
-				"                                        <a class=\"search-link\" target=\"_blank\" href=\"";
+				"                                        <a class=\"search-link\" target=\"_blank\" href=\"http://";
 			#line 35 "pages/result.html"
 			out() << url; 
 			#line 35 "pages/result.html"
