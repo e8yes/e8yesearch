@@ -30,7 +30,7 @@ private:
 
         typedef std::set<Document> 		buffer_t;
 
-        const static int			MAX_BUFFER_SIZE = 5000;
+        const static int			MAX_BUFFER_SIZE = 2000;
         cppdb::session 				sql;
         buffer_t				buffer;
         std::set<Term>				term_set;

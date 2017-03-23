@@ -1,5 +1,6 @@
 #include "spidytextsearch.h"
 #include "sqlitedatasource.h"
+#include <iostream>
 #include <cmath>
 #include <set>
 #include <algorithm>
@@ -22,16 +23,18 @@ engine::SpidyTextSearch::rank(const TextQuery& query, sorted_results_t& results)
         const docterms_t& qterms = query.get_term_info();
 
         for (Document& doc: results) {
-                double importance = .0f;
-                for (const docterm_t& term_in_doc: doc.get_term_info()) {
+                float importance = .0f;
+                for (docterm_t term_in_doc: doc.get_term_info()) {
                         auto found = qterms.find(term_in_doc.first);
                         if (found != qterms.end()) {
-                                double tf_idf = std::log(term_in_doc.second.tf()) *
-                                                std::log(static_cast<float>(this->m_data_source.document_count())/found->first.get_idf());
-                                importance += tf_idf;
+                                double idf = std::log(static_cast<float>(this->m_data_source.document_count())/found->first.get_idf());
+                                if (idf > 1) {
+                                        double tf_idf = std::log(term_in_doc.second.tf())*idf;
+                                        importance += tf_idf;
+                                }
                         }
                 }
-                doc.set_importance(static_cast<float>(importance));
+                doc.set_importance(importance);
         }
 }
 

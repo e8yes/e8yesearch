@@ -181,7 +181,7 @@ parse_as_text(const std::string& file_name, engine::support::SpidyTokenIterator*
                         if (!std::isalnum(ch) && ch != '-') {
                                 it->add(buffer);
                                 buffer.clear();
-                                state = 1;
+                                state = 0;
                         } else {
                                 buffer += static_cast<char>(ch);
                                 state = 1;
@@ -263,7 +263,7 @@ engine::support::Spidy::crawl(const std::string &directory)
         }
         SpidyDocIterator* it= new SpidyDocIterator();
         ::crawl(boost::filesystem::path(directory), it, path_url_map);
-        it->finalize();
+        //it->finalize();
         return it;
 }
 
